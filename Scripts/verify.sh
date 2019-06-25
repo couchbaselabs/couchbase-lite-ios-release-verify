@@ -31,7 +31,7 @@ then
 fi
 
 # ------------------------------
-
+BASEDIR=$(dirname "$0")
 echo "Starting to verify..."
 declare -a langs=("swift" "objc")
 declare -a edition=("enterprise" "community")
@@ -40,50 +40,60 @@ for LANG in "${langs[@]}"
 do
   for EDITION in "${edition[@]}"
   do
-    FILE=couchbase-lite-${LANG}_${EDITION}_${VERSION}-${BUILD}
-    URL=http://172.23.120.24/builds/latestbuilds/couchbase-lite-ios/$VERSION/$BUILD/${FILE}.zip
+    FOLDER=couchbase-lite-${LANG}_${EDITION}_${VERSION}-${BUILD}
+    URL=http://172.23.120.24/builds/latestbuilds/couchbase-lite-ios/$VERSION/$BUILD/${FOLDER}.zip
 
-#    echo "Downloading: $URL"
-#    curl -O $URL
-#    echo "Unzipping..."
-#    mkdir $FILE
-#    unzip ${FILE}.zip -d ${PWD}/${FILE}
+    echo "Downloading: $URL"
+    curl -O $URL
+    echo "Unzipping..."
+    mkdir $FOLDER
+    unzip ${FOLDER}.zip -d ${BASEDIR}/../${FOLDER}
 
-# ------------------------------ VERIFY INFO PLIST
-    echo "Verifying Info Plist"
-
-    if [[ "$LANG" == "swift" ]]
-    then
-      EXTRACTED_VERSION=$(plutil -extract CFBundleShortVersionString xml1 -o - ${PWD}/$FILE/iOS/CouchbaseLiteSwift.framework/Info.plist | sed -n "s/.*<string>\(.*\)<\/string>.*/\1/p")
-    else
-      EXTRACTED_VERSION=$(plutil -extract CFBundleShortVersionString xml1 -o - ${PWD}/$FILE/iOS/CouchbaseLite.framework/Info.plist | sed -n "s/.*<string>\(.*\)<\/string>.*/\1/p")
-    fi
-
-    if [[ (-z $EXTRACTED_VERSION) || ("$EXTRACTED_VERSION" != "$VERSION") ]]
-    then
-      echo "Version Mismatch Error!!! Extracted as $EXTRACTED_VERSION but expected $VERSION"
-    exit 4
-    fi
-    echo "Successfully verified the version!"
-
-
-# ------------------------------ RELEASE VERIFICATION PROJECT
     echo "Verifying release verification project"
     declare -a devices=("ios" "macos")
     for DEVICE in "${devices[@]}"
     do
-        if [[ "$DEVICE" == "ios" ]]
+      if [[ "$LANG" == "swift" ]]
+      then
+        FRAMEWORK_NAME="CouchbaseLiteSwift.framework"
+
+      else
+        FRAMEWORK_NAME="CouchbaseLite.framework"
+      fi
+
+      if [[ "$DEVICE" == "ios" ]]
+      then
+        DESTINATION="platform=iOS Simulator,name=iPhone 7"
+        DEVICE_SUBFOLDER_NAME="iOS"
+
+        # ------------------------------ VERIFY INFO PLIST
+        echo "Verifying Info Plist"
+        EXTRACTED_VERSION=$(plutil -extract CFBundleShortVersionString xml1 -o - ${BASEDIR}/../$FOLDER/iOS/${FRAMEWORK_NAME}/Info.plist | sed -n "s/.*<string>\(.*\)<\/string>.*/\1/p")
+
+        if [[ (-z $EXTRACTED_VERSION) || ("$EXTRACTED_VERSION" != "$VERSION") ]]
         then
-          DESTINATION="platform=iOS Simulator,name=iPhone 7"
-        else
-          DESTINATION="platform=OS X"
+        echo "Version Mismatch Error!!! Extracted as $EXTRACTED_VERSION but expected $VERSION => path is ${BASEDIR}/../$FOLDER/${DEVICE_SUBFOLDER_NAME}/${FRAMEWORK_NAME}/Info.plist"
+        exit 4
         fi
+        echo "Successfully verified the version!"
+      else
+        DEVICE_SUBFOLDER_NAME="macOS"
+        DESTINATION="platform=OS X"
+        cp -v "${BASEDIR}/../$FOLDER/macOS/${FRAMEWORK_NAME}"
+      fi
 
 
-        PROJECT="${PWD}/ReleaseVerify/ReleaseVerify-${DEVICE}-${LANG}/ReleaseVerify-${DEVICE}-${LANG}.xcodeproj"
-        SCHEME="ReleaseVerify-${DEVICE}-${LANG}Tests"
+    # ------------------------------
+    # ------------------------------ VERIFY THROUGH RELEASE-PROJECT
+    # ------------------------------
+      PROJECT="${BASEDIR}/../ReleaseVerify/ReleaseVerify-${DEVICE}-${LANG}/ReleaseVerify-${DEVICE}-${LANG}.xcodeproj"
+      SCHEME="ReleaseVerify-${DEVICE}-${LANG}Tests"
 
-        RESULT=$(xcodebuild test -project $PROJECT -scheme $SCHEME -destination "$DESTINATION")
+    # ------------------------------ COPY FRAMEWORKS TO PROJECT
+      cp -Rv "${BASEDIR}/../$FOLDER/${DEVICE_SUBFOLDER_NAME}/${FRAMEWORK_NAME}" ${BASEDIR}/../ReleaseVerify/ReleaseVerify-${DEVICE}-${LANG}/Frameworks/${FRAMEWORK_NAME}
+
+    # ------------------------------ XCODE BUILD TEST PROJECT
+      RESULT=$(xcodebuild test -project $PROJECT -scheme $SCHEME -destination "$DESTINATION")
         if (( !$RESULT ))
         then
           echo "Test Failed!!!"
@@ -94,9 +104,11 @@ do
     done
 
 # ------------------------------ REMOVE ALL RELATED FILES
-    echo "Removing: ${FILE} and ${FILE}.zip"
-    rm -rf $FILE
-    rm -rf ${FILE}.zip
+    echo "Removing: ${FOLDER}"
+    rm -rf ${BASEDIR}/../ReleaseVerify/ReleaseVerify-${DEVICE}-${LANG}/Frameworks/${FRAMEWORK_NAME}
+    rm -rf ${BASEDIR}/../${FOLDER}
+    rm -rf ${FOLDER}
+    rm -rf ${FOLDER}.zip
   done
 done
 
