@@ -93,14 +93,14 @@ do
       cp -Rv "${BASEDIR}/../$FOLDER/${DEVICE_SUBFOLDER_NAME}/${FRAMEWORK_NAME}" ${BASEDIR}/../ReleaseVerify/ReleaseVerify-${DEVICE}-${LANG}/Frameworks/${FRAMEWORK_NAME}
 
     # ------------------------------ XCODE BUILD TEST PROJECT
-      RESULT=$(xcodebuild test -project $PROJECT -scheme $SCHEME -destination "$DESTINATION")
-        if (( !$RESULT ))
-        then
+      xcodebuild test -project $PROJECT -scheme $SCHEME -destination "$DESTINATION"
+      if [[ $? == 0 ]]
+      then
+          reports+=( "\xE2\x9C\x94 ${DEVICE}-${LANG}-${EDITION}" )
+      else
           echo "Test Failed!!!"
-          exit 4
-        else
-          reports+=( "${DEVICE}-${LANG}-${EDITION}" )
-        fi
+          reports+=( "x ${DEVICE}-${LANG}-${EDITION}" )
+      fi
     done
     # ------------------------------ REMOVE ALL RELATED FILES
     rm -rf ${BASEDIR}/../${FOLDER}
@@ -110,4 +110,4 @@ do
 done
 
 echo "Finished verifying!"
-printf '\xE2\x9C\x94 %b\n' "${reports[@]}"
+printf '%b\n' "${reports[@]}"

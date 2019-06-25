@@ -16,8 +16,8 @@ class BasicTest: XCTestCase {
     var repl: Replicator!
 
     override func setUp() {
-        Database.log.console.level = .debug
-        Database.log.console.domains = .all
+//        Database.log.console.level = .debug
+//        Database.log.console.domains = .all
         
         try! Database.delete(withName: dbName, inDirectory: nil)
         

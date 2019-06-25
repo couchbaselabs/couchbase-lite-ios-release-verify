@@ -21,7 +21,7 @@ NSString* dbName = @"release-verification";
 @implementation BasicTest
 
 - (void)setUp {
-    CBLDatabase.log.console.level = kCBLLogLevelDebug;
+//    CBLDatabase.log.console.level = kCBLLogLevelDebug;
     
     NSError *error;
     [CBLDatabase deleteDatabase: dbName inDirectory: nil error: &error];
@@ -88,14 +88,7 @@ NSString* dbName = @"release-verification";
     
     [_repl start];
     
-    @try {
-        [self waitForExpectations: @[x] timeout: 5.0];
-    }
-    @finally {
-        if (_repl.status.activity != kCBLReplicatorStopped)
-            [_repl stop];
-        [_repl removeChangeListenerWithToken: token];
-    }
+    [self waitForExpectations: @[x] timeout: 5.0];
 }
 
 @end
