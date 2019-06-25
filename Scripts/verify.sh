@@ -48,8 +48,9 @@ do
     echo "Unzipping..."
     mkdir $FOLDER
     unzip ${FOLDER}.zip -d ${BASEDIR}/../${FOLDER}
+    rm -rf ${FOLDER}
+    rm -rf ${FOLDER}.zip
 
-    echo "Verifying release verification project"
     declare -a devices=("ios" "macos")
     for DEVICE in "${devices[@]}"
     do
@@ -79,7 +80,6 @@ do
       else
         DEVICE_SUBFOLDER_NAME="macOS"
         DESTINATION="platform=OS X"
-        cp -v "${BASEDIR}/../$FOLDER/macOS/${FRAMEWORK_NAME}"
       fi
 
 
@@ -102,13 +102,10 @@ do
           reports+=( "${DEVICE}-${LANG}-${EDITION}" )
         fi
     done
-
-# ------------------------------ REMOVE ALL RELATED FILES
-    echo "Removing: ${FOLDER}"
-    rm -rf ${BASEDIR}/../ReleaseVerify/ReleaseVerify-${DEVICE}-${LANG}/Frameworks/${FRAMEWORK_NAME}
+    # ------------------------------ REMOVE ALL RELATED FILES
     rm -rf ${BASEDIR}/../${FOLDER}
-    rm -rf ${FOLDER}
-    rm -rf ${FOLDER}.zip
+    rm -rf ${BASEDIR}/../ReleaseVerify/ReleaseVerify-ios-${LANG}/Frameworks/${FRAMEWORK_NAME}
+    rm -rf ${BASEDIR}/../ReleaseVerify/ReleaseVerify-macos-${LANG}/Frameworks/${FRAMEWORK_NAME}
   done
 done
 
