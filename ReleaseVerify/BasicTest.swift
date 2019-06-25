@@ -27,7 +27,7 @@ class BasicTest: XCTestCase {
     
     override func tearDown() {
         repl = nil
-        
+
         try! db.close()
         db = nil
     }
@@ -66,7 +66,7 @@ class BasicTest: XCTestCase {
         }
         
         repl.start()
-        wait(for: [x], timeout: 5.0)
+        wait(for: [x], timeout: 10.0)
         
         repl.removeChangeListener(withToken: token)
     }

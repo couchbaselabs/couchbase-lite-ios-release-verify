@@ -37,6 +37,15 @@ NSString* dbName = @"release-verification";
         return;
     }
 }
+    
+- (void) tearDown {
+    _repl = nil;
+    
+    NSError* error;
+    [self.db close: &error];
+    
+    _db = nil;
+}
 
 - (void) test {
     CBLMutableDocument *doc = [[CBLMutableDocument alloc] init];
@@ -80,6 +89,7 @@ NSString* dbName = @"release-verification";
     CBLReplicatorConfiguration *config = [[CBLReplicatorConfiguration alloc] initWithDatabase: self.db
                                                                                        target: endpoint];
     _repl = [[CBLReplicator alloc] initWithConfig: config];
+    CBLReplicator* replicator = _repl;
     id token = [_repl addChangeListener: ^(CBLReplicatorChange* change) {
         if (change.status.activity == kCBLReplicatorStopped) {
             [x fulfill];
@@ -89,6 +99,7 @@ NSString* dbName = @"release-verification";
     [_repl start];
     
     [self waitForExpectations: @[x] timeout: 5.0];
+    [replicator removeChangeListenerWithToken: token];
 }
 
 @end

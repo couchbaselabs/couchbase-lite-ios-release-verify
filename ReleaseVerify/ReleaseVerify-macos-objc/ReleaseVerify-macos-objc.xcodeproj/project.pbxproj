@@ -49,7 +49,7 @@
 		1A483D0022C17DAE002D0F32 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1A483D0222C17DAE002D0F32 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1A483D0322C17DAE002D0F32 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		1A483D0522C17DAE002D0F32 /* ReleaseVerify_MacOS_ObjC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ReleaseVerify_MacOS_ObjC.entitlements; sourceTree = "<group>"; };
+		1A483D0522C17DAE002D0F32 /* ReleaseVerify_macos_objc.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ReleaseVerify_macos_objc.entitlements; sourceTree = "<group>"; };
 		1A483D0A22C17DAE002D0F32 /* ReleaseVerify-macos-objcTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ReleaseVerify-macos-objcTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A483D1022C17DAE002D0F32 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1A483D1922C17DD5002D0F32 /* BasicTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BasicTest.m; path = ../../BasicTest.m; sourceTree = "<group>"; };
@@ -104,7 +104,7 @@
 				1A483CFF22C17DAE002D0F32 /* Main.storyboard */,
 				1A483D0222C17DAE002D0F32 /* Info.plist */,
 				1A483D0322C17DAE002D0F32 /* main.m */,
-				1A483D0522C17DAE002D0F32 /* ReleaseVerify_MacOS_ObjC.entitlements */,
+				1A483D0522C17DAE002D0F32 /* ReleaseVerify_macos_objc.entitlements */,
 			);
 			path = "ReleaseVerify-macos-objc";
 			sourceTree = "<group>";
@@ -378,7 +378,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "ReleaseVerify-MacOS-ObjC/ReleaseVerify_MacOS_ObjC.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = N2Q372V7W2;
@@ -400,7 +399,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "ReleaseVerify-MacOS-ObjC/ReleaseVerify_MacOS_ObjC.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = N2Q372V7W2;
