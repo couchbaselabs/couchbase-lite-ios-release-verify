@@ -2,7 +2,7 @@
   "log": ["*"],
   "databases": {
     "release-verification": {
-      "server": "http://localhost:8091",
+      "server": "walrus:",
       "bucket": "release-verification",
       "username": "admin", 
       "password": "password", 

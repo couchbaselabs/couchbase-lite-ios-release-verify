@@ -2,19 +2,20 @@
 
 function usage
 {
-  echo "Usage: ${0} -v <Version> -b <Build>"
+  echo "Usage for validating Jenkins build: ${0} -v <Version> -b <Build>"
+  echo "Usage for Downloads Page: ${0} -v <Version> -d"
 }
 
 
-while getopts v:b: option
+while getopts v:b:d option
 do
   case "${option}"
     in
     v) VERSION=${OPTARG};;
     b) BUILD=${OPTARG};;
+    d) DOWNLOADS="YES";;
   esac
 done
-
 
 if [ -z "$VERSION" ]
 then
@@ -23,12 +24,13 @@ then
   exit 4
 fi
 
-if [ -z "$BUILD" ]
+if [ -z "$BUILD" ] && [ -z "$DOWNLOADS" ]
 then
-  echo "Error: Please include build"
+  echo "Error: Please include build number or download flag"
   usage
   exit 4
 fi
+
 
 # ------------------------------
 BASEDIR=$(dirname "$0")
@@ -40,15 +42,20 @@ for LANG in "${langs[@]}"
 do
   for EDITION in "${edition[@]}"
   do
-    FOLDER=couchbase-lite-${LANG}_${EDITION}_${VERSION}-${BUILD}
-    URL=http://172.23.120.24/builds/latestbuilds/couchbase-lite-ios/$VERSION/$BUILD/${FOLDER}.zip
+    if [ -z "$DOWNLOADS" ]
+    then
+      FOLDER=couchbase-lite-${LANG}_${EDITION}_${VERSION}-${BUILD}
+      URL=http://172.23.120.24/builds/latestbuilds/couchbase-lite-ios/$VERSION/$BUILD/${FOLDER}.zip
+    else
+      FOLDER=couchbase-lite-${LANG}_${EDITION}_${VERSION}
+      URL=https://packages.couchbase.com/releases/couchbase-lite-ios/$VERSION/${FOLDER}.zip
+    fi
 
     echo "Downloading: $URL"
     curl -O $URL
     echo "Unzipping..."
     mkdir $FOLDER
     unzip ${FOLDER}.zip -d ${BASEDIR}/../${FOLDER}
-    rm -rf ${FOLDER}
     rm -rf ${FOLDER}.zip
 
     declare -a devices=("ios" "macos")
@@ -93,7 +100,7 @@ do
       cp -Rv "${BASEDIR}/../$FOLDER/${DEVICE_SUBFOLDER_NAME}/${FRAMEWORK_NAME}" ${BASEDIR}/../ReleaseVerify/ReleaseVerify-${DEVICE}-${LANG}/Frameworks/${FRAMEWORK_NAME}
 
     # ------------------------------ XCODE BUILD TEST PROJECT
-      xcodebuild test -project $PROJECT -scheme $SCHEME -destination "$DESTINATION"
+      xcodebuild test -project $PROJECT -scheme $SCHEME -destination "$DESTINATION" "ONLY_ACTIVE_ARCH=NO" "BITCODE_GENERATION_MODE=bitcode" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGN_IDENTITY=" "-quiet"
       if [[ $? == 0 ]]
       then
           reports+=( "\xE2\x9C\x94 ${DEVICE}-${LANG}-${EDITION}" )
@@ -103,11 +110,17 @@ do
       fi
     done
     # ------------------------------ REMOVE ALL RELATED FILES
+    rm -rf ${FOLDER}
     rm -rf ${BASEDIR}/../${FOLDER}
     rm -rf ${BASEDIR}/../ReleaseVerify/ReleaseVerify-ios-${LANG}/Frameworks/${FRAMEWORK_NAME}
     rm -rf ${BASEDIR}/../ReleaseVerify/ReleaseVerify-macos-${LANG}/Frameworks/${FRAMEWORK_NAME}
   done
 done
 
-echo "Finished verifying!"
+if [ -z "$DOWNLOADS" ]
+then
+  echo "Finished verifying Build: ${VERSION}(${BUILD}) from Jenkins"
+else
+  echo "Finished verifying Build: ${VERSION} from Downloads page "
+fi
 printf '%b\n' "${reports[@]}"
