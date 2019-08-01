@@ -13,8 +13,8 @@
 		1A483D0422C17DAE002D0F32 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A483D0322C17DAE002D0F32 /* main.m */; };
 		1A483D1A22C17DD5002D0F32 /* BasicTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A483D1922C17DD5002D0F32 /* BasicTest.m */; };
 		1A483D1D22C17DF5002D0F32 /* CouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A483D1C22C17DF5002D0F32 /* CouchbaseLite.framework */; };
-		1A483D1E22C17E30002D0F32 /* CouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A483D1C22C17DF5002D0F32 /* CouchbaseLite.framework */; };
-		1A483D1F22C17E30002D0F32 /* CouchbaseLite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1A483D1C22C17DF5002D0F32 /* CouchbaseLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		696882CA22D926A800888463 /* CouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A483D1C22C17DF5002D0F32 /* CouchbaseLite.framework */; };
+		696882CB22D926A800888463 /* CouchbaseLite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1A483D1C22C17DF5002D0F32 /* CouchbaseLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,13 +28,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		1A483D2022C17E30002D0F32 /* Embed Frameworks */ = {
+		696882CC22D926A800888463 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				1A483D1F22C17E30002D0F32 /* CouchbaseLite.framework in Embed Frameworks */,
+				696882CB22D926A800888463 /* CouchbaseLite.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -61,7 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1A483D1E22C17E30002D0F32 /* CouchbaseLite.framework in Frameworks */,
+				696882CA22D926A800888463 /* CouchbaseLite.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,7 +136,7 @@
 				1A483CF022C17DAE002D0F32 /* Sources */,
 				1A483CF122C17DAE002D0F32 /* Frameworks */,
 				1A483CF222C17DAE002D0F32 /* Resources */,
-				1A483D2022C17E30002D0F32 /* Embed Frameworks */,
+				696882CC22D926A800888463 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
