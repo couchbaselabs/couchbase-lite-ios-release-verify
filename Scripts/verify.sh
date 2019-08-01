@@ -1,20 +1,40 @@
 #!/bin/bash
 
+set -e
+
 function usage
 {
   echo "Usage for validating Jenkins build: ${0} -v <Version> -b <Build>"
   echo "Usage for Downloads Page: ${0} -v <Version> -d"
+  echo "Usage for Already downloaded builds: ${0} -p <path to builds> -v <Version> -b <Build>"
 }
 
-
-while getopts v:b:d option
+while [[ $# -gt 0 ]]
 do
-  case "${option}"
-    in
-    v) VERSION=${OPTARG};;
-    b) BUILD=${OPTARG};;
-    d) DOWNLOADS="YES";;
+  key=${1}
+  case $key in
+      -v)
+      VERSION=${2}
+      shift
+      ;;
+      -b)
+      BUILD=${2}
+      shift
+      ;;
+      -d)
+      DOWNLOADS="YES"
+      shift
+      ;;
+      -p)
+      FRAMEWORK_PATH=${2}
+      shift
+      ;;
+      *)
+      usage
+      exit 3
+      ;;
   esac
+  shift
 done
 
 if [ -z "$VERSION" ]
@@ -24,17 +44,21 @@ then
   exit 4
 fi
 
-if [ -z "$BUILD" ] && [ -z "$DOWNLOADS" ]
+if [ -z "$BUILD" ] && [ -z "$DOWNLOADS" ] && [ -z "$PATH" ]
 then
   echo "Error: Please include build number or download flag"
   usage
   exit 4
 fi
 
-
 # ------------------------------
-BASEDIR=$(dirname "$0")
 echo "Starting to verify..."
+echo "VERSION: $VERSION"
+echo "BUILD: $BUILD"
+echo "DOWNLOADS: $DOWNLOADS"
+echo "PATH: $PATH"
+
+BASEDIR=$(dirname "$0")
 declare -a langs=("swift" "objc")
 declare -a edition=("enterprise" "community")
 declare -a reports
@@ -42,21 +66,41 @@ for LANG in "${langs[@]}"
 do
   for EDITION in "${edition[@]}"
   do
-    if [ -z "$DOWNLOADS" ]
+    if [[ "$DOWNLOADS" == "YES" ]]
     then
+      # From the Downloads page
+      FOLDER=couchbase-lite-${LANG}_${EDITION}_${VERSION}
+      URL=https://packages.couchbase.com/releases/couchbase-lite-ios/$VERSION/${FOLDER}.zip
+      
+    elif [ -z "$PATH" ]
+    then
+      # From the Jenkins location
       FOLDER=couchbase-lite-${LANG}_${EDITION}_${VERSION}-${BUILD}
       URL=http://172.23.120.24/builds/latestbuilds/couchbase-lite-ios/$VERSION/$BUILD/${FOLDER}.zip
     else
-      FOLDER=couchbase-lite-${LANG}_${EDITION}_${VERSION}
-      URL=https://packages.couchbase.com/releases/couchbase-lite-ios/$VERSION/${FOLDER}.zip
+      # From the path
+      
+      if [[ "$EDITION" == "community" ]]
+      then
+        # skip the community since, we end up not verifying the community version
+        continue
+      fi
+      FOLDER=couchbase-lite-${LANG}_${EDITION}_${VERSION}-${BUILD}
+      URL=$FRAMEWORK_PATH/${FOLDER}.zip
     fi
 
-    echo "Downloading: $URL"
-    curl -O $URL
-    echo "Unzipping..."
-    mkdir $FOLDER
-    unzip ${FOLDER}.zip -d ${BASEDIR}/../${FOLDER}
-    rm -rf ${FOLDER}.zip
+    if [ -z "$PATH" ]
+    then
+      echo "Downloading: $URL"
+      curl -O $URL
+      echo "Unzipping..."
+      mkdir ${BASEDIR}/../$FOLDER
+      unzip ${FOLDER}.zip -d ${BASEDIR}/../${FOLDER}
+      rm -rf ${FOLDER}.zip
+    else
+      mkdir ${BASEDIR}/../$FOLDER
+      unzip ${URL} -d ${BASEDIR}/../${FOLDER}
+    fi
 
     declare -a devices=("ios" "macos")
     for DEVICE in "${devices[@]}"
@@ -71,7 +115,7 @@ do
 
       if [[ "$DEVICE" == "ios" ]]
       then
-        DESTINATION="platform=iOS Simulator,name=iPhone 7"
+        DESTINATION="platform=iOS Simulator,name=iPhone 8"
         DEVICE_SUBFOLDER_NAME="iOS"
 
         # ------------------------------ VERIFY INFO PLIST
@@ -117,10 +161,15 @@ do
   done
 done
 
-if [ -z "$DOWNLOADS" ]
+if [[ "$DOWNLOADS" == "YES" ]]
 then
-  echo "Finished verifying Build: ${VERSION}(${BUILD}) from Jenkins"
+   FROM="Jenkins."
+elif [ -z "$PATH" ]
+then
+  FROM="Downloads page."
 else
-  echo "Finished verifying Build: ${VERSION} from Downloads page "
+  FROM="Folder."
 fi
+
+echo "Finished verifying Build: ${VERSION}(${BUILD}) from $FROM"
 printf '%b\n' "${reports[@]}"
