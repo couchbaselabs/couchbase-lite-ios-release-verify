@@ -23,7 +23,6 @@ do
       ;;
       -d)
       DOWNLOADS="YES"
-      shift
       ;;
       -p)
       FRAMEWORK_PATH=${2}
@@ -44,7 +43,7 @@ then
   exit 4
 fi
 
-if [ -z "$BUILD" ] && [ -z "$DOWNLOADS" ] && [ -z "$PATH" ]
+if [ -z "$BUILD" ] && [ -z "$DOWNLOADS" ] && [ -z "$FRAMEWORK_PATH" ]
 then
   echo "Error: Please include build number or download flag"
   usage
@@ -56,7 +55,7 @@ echo "Starting to verify..."
 echo "VERSION: $VERSION"
 echo "BUILD: $BUILD"
 echo "DOWNLOADS: $DOWNLOADS"
-echo "PATH: $PATH"
+echo "PATH: $FRAMEWORK_PATH"
 
 BASEDIR=$(dirname "$0")
 declare -a langs=("swift" "objc")
@@ -72,7 +71,7 @@ do
       FOLDER=couchbase-lite-${LANG}_${EDITION}_${VERSION}
       URL=https://packages.couchbase.com/releases/couchbase-lite-ios/$VERSION/${FOLDER}.zip
       
-    elif [ -z "$PATH" ]
+    elif [ -z "$FRAMEWORK_PATH" ]
     then
       # From the Jenkins location
       FOLDER=couchbase-lite-${LANG}_${EDITION}_${VERSION}-${BUILD}
@@ -89,7 +88,7 @@ do
       URL=$FRAMEWORK_PATH/${FOLDER}.zip
     fi
 
-    if [ -z "$PATH" ]
+    if [ -z "$FRAMEWORK_PATH" ]
     then
       echo "Downloading: $URL"
       curl -O $URL
@@ -164,7 +163,7 @@ done
 if [[ "$DOWNLOADS" == "YES" ]]
 then
    FROM="Jenkins."
-elif [ -z "$PATH" ]
+elif [ -z "$FRAMEWORK_PATH" ]
 then
   FROM="Downloads page."
 else
