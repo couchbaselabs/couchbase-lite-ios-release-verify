@@ -162,10 +162,10 @@ done
 
 if [[ "$DOWNLOADS" == "YES" ]]
 then
-   FROM="Jenkins."
+   FROM="Downloads Page"
 elif [ -z "$FRAMEWORK_PATH" ]
 then
-  FROM="Downloads page."
+  FROM="Jenkins(http://172.23.120.24/builds/latestbuilds/couchbase-lite-ios/)"
 else
   FROM="Folder."
 fi
