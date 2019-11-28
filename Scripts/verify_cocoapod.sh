@@ -101,10 +101,10 @@ do
       
       if [[ $? == 0 ]]
       then
-          reports+=( "\xE2\x9C\x94 cocoapod-${DESTIN}-${LANGUAGE}-${EDITION}" )
+          reports+=( "\xE2\x9C\x94 ${DESTIN}-${LANGUAGE}-${EDITION}" )
       else
           echo "Test Failed!!!"
-          reports+=( "x cocoapod-${DESTIN}-${LANGUAGE}-${EDITION}" )
+          reports+=( "x ${DESTIN}-${LANGUAGE}-${EDITION}" )
       fi
       
       # remove artifacts
@@ -117,7 +117,7 @@ do
 done
 
 echo "-------------------------------"
-echo "Verification Complete"
+echo "Cocoapod Verification Complete"
 echo "VERSION: $VERSION"
 echo "Cocoapod: $(pod --version)"
 echo "Xcode: $(xcodebuild -version)"
