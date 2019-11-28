@@ -42,7 +42,7 @@ class BasicTest: XCTestCase {
             try db.saveDocument(doc)
             NSLog(">>>>>> Successfully saving the document");
         } catch let error as NSError {
-            NSLog("Error saving document: %@", error)
+            XCTFail("Error Saving Document \(error.localizedDescription)");
         }
         
         runReplicator()
@@ -52,17 +52,13 @@ class BasicTest: XCTestCase {
         let doc = MutableDocument()
         doc.setValue("Pasin", forKey: "firstname")
         doc.setValue("Suriyentrakorn", forKey: "lastname")
-        
-        let str = "CouchbaseLite 2.0"
-        let data = str.data(using: .utf8)
-        doc.setValue(Blob(contentType: "text/plain", data: data!), forKey: "blob")
         do {
             try db.saveDocument(doc)
             NSLog(">>>>>> Successfully saving the document");
             try db.deleteDocument(db.document(withID: doc.id)!)
             NSLog(">>>>>> Successfully deleted the document");
         } catch let error as NSError {
-            NSLog("Error saving document: %@", error)
+            XCTFail("Error Saving Document \(error.localizedDescription)");
         }
         
         runReplicator()

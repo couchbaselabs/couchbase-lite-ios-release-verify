@@ -68,21 +68,6 @@ NSString* dbName = @"release-verification";
     [self run];
 }
 
-- (SecCertificateRef) sslCert {
-    NSData* certData = [self dataFromResource: @"SelfSigned" ofType: @"cer"];
-    SecCertificateRef cert = SecCertificateCreateWithData(NULL, (__bridge CFDataRef)certData);
-    return (SecCertificateRef)CFAutorelease(cert);
-}
-
-- (NSData*) dataFromResource: (NSString*)res ofType: (NSString*)type {
-    NSString* path = [[NSBundle bundleForClass: [self class]] pathForResource: res
-                                                                       ofType: type];
-    NSData* contents = [NSData dataWithContentsOfFile: path
-                                              options: 0
-                                                error: NULL];
-    return contents;
-}
-
 - (void) run {
     XCTestExpectation* x = [self expectationWithDescription: @"Replicator Stopped"];
     CBLURLEndpoint *endpoint = [[CBLURLEndpoint alloc] initWithURL: [NSURL URLWithString: @"ws://localhost:4984/release-verification"]];
