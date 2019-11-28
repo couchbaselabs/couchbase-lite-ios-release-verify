@@ -29,9 +29,8 @@ class BasicTest: XCTestCase {
         db = nil
     }
 
-    func test() {
+    func testSave() {
         let doc = MutableDocument()
-        NSLog("Document: %@", doc.id)
         doc.setValue("Pasin", forKey: "firstname")
         doc.setValue("Suriyentrakorn", forKey: "lastname")
         
@@ -41,7 +40,27 @@ class BasicTest: XCTestCase {
         
         do {
             try db.saveDocument(doc)
-            NSLog("Successfully saving the document")
+            NSLog(">>>>>> Successfully saving the document");
+        } catch let error as NSError {
+            NSLog("Error saving document: %@", error)
+        }
+        
+        runReplicator()
+    }
+    
+    func testDelete() {
+        let doc = MutableDocument()
+        doc.setValue("Pasin", forKey: "firstname")
+        doc.setValue("Suriyentrakorn", forKey: "lastname")
+        
+        let str = "CouchbaseLite 2.0"
+        let data = str.data(using: .utf8)
+        doc.setValue(Blob(contentType: "text/plain", data: data!), forKey: "blob")
+        do {
+            try db.saveDocument(doc)
+            NSLog(">>>>>> Successfully saving the document");
+            try db.deleteDocument(db.document(withID: doc.id)!)
+            NSLog(">>>>>> Successfully deleted the document");
         } catch let error as NSError {
             NSLog("Error saving document: %@", error)
         }

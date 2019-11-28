@@ -47,7 +47,7 @@ NSString* dbName = @"release-verification";
     _db = nil;
 }
 
-- (void) test {
+- (void) testSave {
     CBLMutableDocument *doc = [[CBLMutableDocument alloc] init];
     NSLog(@"Document: %@", doc.id);
     
@@ -60,7 +60,7 @@ NSString* dbName = @"release-verification";
     
     NSError* error;
     if ([self.db saveDocument: doc error: &error]) {
-        NSLog(@"Successfully saving the document");
+        NSLog(@">>> Successfully saving the document");
     } else {
         NSLog(@"Error saving a document: %@", error);
     }

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+set -e
 
 function usage
 {
@@ -34,12 +34,12 @@ fi
 echo "Starting to verify $VERSION..."
 
 BASEDIR=$(dirname "$0")
-PROJ_PREFIX="ReleaseVerify-packman"
+PROJ_PREFIX="ReleaseVerify-cocoapod"
 
 # combinations
 declare -a langs=("swift" "objc")
-declare -a editions=("enterprise")
-declare -a destinations=("ios" "osx")
+declare -a editions=("enterprise" "community")
+declare -a destinations=("ios" "macos")
 
 declare -a reports # for printing report at end
 for LANGUAGE in "${langs[@]}"
@@ -50,10 +50,10 @@ do
     do
 
       # all variables
-      PROJECT_NAME="$PROJ_PREFIX-$LANGUAGE"
+      PROJECT_NAME="$PROJ_PREFIX"
       PROJECT_PATH="${BASEDIR}/../ReleaseVerify/$PROJECT_NAME"
       XCWORKSPACE=$PROJECT_PATH/$PROJECT_NAME.xcworkspace/
-      XCSCHEME="${PROJECT_NAME}Tests"
+      XCSCHEME="${PROJECT_NAME}-$DESTIN-$LANGUAGE-tests"
       PODFILE="$PROJECT_PATH/Podfile"
       
       # create product name
@@ -79,9 +79,9 @@ do
       # platform
       if [[ "$DESTIN" == "ios" ]]
       then
-        PLATFORM="$DESTIN, '13.0'"
+        PLATFORM="ios, '13.0'"
       else
-        PLATFORM="$DESTIN, '10.11'"
+        PLATFORM="osx, '10.11'"
       fi
       
       # create and populate Podfile
@@ -101,10 +101,10 @@ do
       
       if [[ $? == 0 ]]
       then
-          reports+=( "\xE2\x9C\x94 cocoapod-${LANGUAGE}-${EDITION}" )
+          reports+=( "\xE2\x9C\x94 cocoapod-${DESTIN}-${LANGUAGE}-${EDITION}" )
       else
           echo "Test Failed!!!"
-          reports+=( "x cocoapod-${LANGUAGE}-${EDITION}" )
+          reports+=( "x cocoapod-${DESTIN}-${LANGUAGE}-${EDITION}" )
       fi
       
       # remove artifacts
@@ -116,9 +116,9 @@ do
   done
 done
 
-echo "Finished Verifying!"
+echo "-------------------------------"
+echo "Verification Complete"
 echo "VERSION: $VERSION"
-echo "Carthage: $(carthage version)"
 echo "Cocoapod: $(pod --version)"
 echo "Xcode: $(xcodebuild -version)"
 printf '%b\n' "${reports[@]}"
