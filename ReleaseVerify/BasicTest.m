@@ -91,7 +91,10 @@ NSString* dbName = @"release-verification";
     _repl = [[CBLReplicator alloc] initWithConfig: config];
     CBLReplicator* replicator = _repl;
     id token = [_repl addChangeListener: ^(CBLReplicatorChange* change) {
-        if (change.status.activity == kCBLReplicatorStopped) {
+        CBLReplicatorStatus* st = change.status;
+        assert(st.error.code == 0);
+        
+        if (st.activity == kCBLReplicatorStopped) {
             [x fulfill];
         }
     }];

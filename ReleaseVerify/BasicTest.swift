@@ -16,9 +16,6 @@ class BasicTest: XCTestCase {
     var repl: Replicator!
 
     override func setUp() {
-//        Database.log.console.level = .debug
-//        Database.log.console.domains = .all
-        
         try! Database.delete(withName: dbName, inDirectory: nil)
         
         db = try! Database(name: dbName, config: DatabaseConfiguration.init())
@@ -60,6 +57,9 @@ class BasicTest: XCTestCase {
         
         let token = repl.addChangeListener { (change) in
             let status = change.status
+            if let err = status.error as NSError?, err.code != 0 {
+                XCTFail("\(status.error!.localizedDescription)")
+            }
             if status.activity == .stopped {
                 x.fulfill()
             }

@@ -114,7 +114,7 @@ do
 
       if [[ "$DEVICE" == "ios" ]]
       then
-        DESTINATION="platform=iOS Simulator,name=iPhone 8"
+        DESTINATION="platform=iOS Simulator,name=iPhone 11"
         DEVICE_SUBFOLDER_NAME="iOS"
 
         # ------------------------------ VERIFY INFO PLIST
@@ -136,7 +136,7 @@ do
     # ------------------------------
     # ------------------------------ VERIFY THROUGH RELEASE-PROJECT
     # ------------------------------
-      PROJECT="${BASEDIR}/../ReleaseVerify/ReleaseVerify-${DEVICE}-${LANG}/ReleaseVerify-${DEVICE}-${LANG}.xcodeproj"
+    PROJECT="${BASEDIR}/../ReleaseVerify/ReleaseVerify-${DEVICE}-${LANG}/ReleaseVerify-${DEVICE}-${LANG}.xcodeproj"
       SCHEME="ReleaseVerify-${DEVICE}-${LANG}Tests"
 
     # ------------------------------ COPY FRAMEWORKS TO PROJECT
