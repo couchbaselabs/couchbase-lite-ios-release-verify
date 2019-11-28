@@ -12,3 +12,12 @@ This project can be used to verify the release builds.
 <img width="445" alt="Downloads" src="https://user-images.githubusercontent.com/10448770/60638762-84e8fd00-9dd4-11e9-8b22-6f9e113e18d1.png">
 <img width="375" alt="Jenkins" src="https://user-images.githubusercontent.com/10448770/60638763-84e8fd00-9dd4-11e9-859c-4d64d7ba3cd2.png">
 
+----
+
+## Cocoapod Verification 
+
+### Steps
+1. `sh Scripts/verify_cocoapod.sh -v <version>`. Example `sh Scripts/verify_cocoapod.sh -v 2.6.3`
+
+### Results
+<img width="288" alt="cocoapod" src="https://user-images.githubusercontent.com/10448770/69828963-e15d1680-11d2-11ea-9754-c7ddcf3590fa.png">
