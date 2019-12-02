@@ -97,7 +97,12 @@ do
       pod install
       popd
       
-      xcodebuild test -workspace $XCWORKSPACE -scheme $XCSCHEME -destination "$DESTINATION" "ONLY_ACTIVE_ARCH=NO" "BITCODE_GENERATION_MODE=bitcode" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGN_IDENTITY=" "-quiet"
+      xcodebuild test \
+        -workspace $XCWORKSPACE \
+        -scheme $XCSCHEME \
+        -destination "$DESTINATION" \
+        "ONLY_ACTIVE_ARCH=NO" "BITCODE_GENERATION_MODE=bitcode" \
+        "CODE_SIGNING_REQUIRED=NO" "CODE_SIGN_IDENTITY=" "-quiet"
       
       if [[ $? == 0 ]]
       then

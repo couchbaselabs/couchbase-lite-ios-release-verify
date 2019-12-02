@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5A491861E3808C64DDC35CC8 /* Pods_ReleaseVerify_cocoapod_macos_objc_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E31E9F5C1FDABD1BFA445F5A /* Pods_ReleaseVerify_cocoapod_macos_objc_tests.framework */; };
 		6945FCED239044D6005E378A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6945FCEC239044D6005E378A /* AppDelegate.m */; };
 		6945FCF0239044D6005E378A /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6945FCEF239044D6005E378A /* SceneDelegate.m */; };
 		6945FCF3239044D6005E378A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6945FCF2239044D6005E378A /* ViewController.m */; };
@@ -19,6 +18,7 @@
 		6945FD3A239045EF005E378A /* BasicTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6945FD38239045EF005E378A /* BasicTest.m */; };
 		6945FD3E23904600005E378A /* BasicTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6945FD3D23904600005E378A /* BasicTest.swift */; };
 		6945FD3F23904600005E378A /* BasicTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6945FD3D23904600005E378A /* BasicTest.swift */; };
+		7CE85D48F00B87D19BAB8CC0 /* Pods_ReleaseVerify_cocoapod_macos_objc_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EB3BB84893B926C493B0B11 /* Pods_ReleaseVerify_cocoapod_macos_objc_tests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,8 +39,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		223D8AD859225B3089FEBCC9 /* Pods-ReleaseVerify-cocoapod-macos-objc-tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReleaseVerify-cocoapod-macos-objc-tests.release.xcconfig"; path = "Target Support Files/Pods-ReleaseVerify-cocoapod-macos-objc-tests/Pods-ReleaseVerify-cocoapod-macos-objc-tests.release.xcconfig"; sourceTree = "<group>"; };
-		243E7C04DC5D197BEADBE8E6 /* Pods-ReleaseVerify-cocoapod-macos-objc-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReleaseVerify-cocoapod-macos-objc-tests.debug.xcconfig"; path = "Target Support Files/Pods-ReleaseVerify-cocoapod-macos-objc-tests/Pods-ReleaseVerify-cocoapod-macos-objc-tests.debug.xcconfig"; sourceTree = "<group>"; };
+		07CE56EE5FB20AAB1C13C685 /* Pods-ReleaseVerify-cocoapod-macos-objc-tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReleaseVerify-cocoapod-macos-objc-tests.release.xcconfig"; path = "Target Support Files/Pods-ReleaseVerify-cocoapod-macos-objc-tests/Pods-ReleaseVerify-cocoapod-macos-objc-tests.release.xcconfig"; sourceTree = "<group>"; };
+		4EB3BB84893B926C493B0B11 /* Pods_ReleaseVerify_cocoapod_macos_objc_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReleaseVerify_cocoapod_macos_objc_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6945FCE8239044D6005E378A /* ReleaseVerify-cocoapod.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ReleaseVerify-cocoapod.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6945FCEB239044D6005E378A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6945FCEC239044D6005E378A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -63,7 +63,7 @@
 		6945FD3423904578005E378A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6945FD38239045EF005E378A /* BasicTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BasicTest.m; path = ../../BasicTest.m; sourceTree = "<group>"; };
 		6945FD3D23904600005E378A /* BasicTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BasicTest.swift; path = ../../BasicTest.swift; sourceTree = "<group>"; };
-		E31E9F5C1FDABD1BFA445F5A /* Pods_ReleaseVerify_cocoapod_macos_objc_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReleaseVerify_cocoapod_macos_objc_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		742730FAECEA859BC2F6411A /* Pods-ReleaseVerify-cocoapod-macos-objc-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReleaseVerify-cocoapod-macos-objc-tests.debug.xcconfig"; path = "Target Support Files/Pods-ReleaseVerify-cocoapod-macos-objc-tests/Pods-ReleaseVerify-cocoapod-macos-objc-tests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,7 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A491861E3808C64DDC35CC8 /* Pods_ReleaseVerify_cocoapod_macos_objc_tests.framework in Frameworks */,
+				7CE85D48F00B87D19BAB8CC0 /* Pods_ReleaseVerify_cocoapod_macos_objc_tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -187,7 +187,7 @@
 		6945FD42239047B6005E378A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E31E9F5C1FDABD1BFA445F5A /* Pods_ReleaseVerify_cocoapod_macos_objc_tests.framework */,
+				4EB3BB84893B926C493B0B11 /* Pods_ReleaseVerify_cocoapod_macos_objc_tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -195,8 +195,8 @@
 		BD9F3829B391FA157A377E39 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				243E7C04DC5D197BEADBE8E6 /* Pods-ReleaseVerify-cocoapod-macos-objc-tests.debug.xcconfig */,
-				223D8AD859225B3089FEBCC9 /* Pods-ReleaseVerify-cocoapod-macos-objc-tests.release.xcconfig */,
+				742730FAECEA859BC2F6411A /* Pods-ReleaseVerify-cocoapod-macos-objc-tests.debug.xcconfig */,
+				07CE56EE5FB20AAB1C13C685 /* Pods-ReleaseVerify-cocoapod-macos-objc-tests.release.xcconfig */,
 			);
 			name = Pods;
 			path = Pods;
@@ -262,11 +262,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6945FD2923904562005E378A /* Build configuration list for PBXNativeTarget "ReleaseVerify-cocoapod-macos-objc-tests" */;
 			buildPhases = (
-				9E1441EADC4AF3E172B7B6F2 /* [CP] Check Pods Manifest.lock */,
+				5518D6B4B7F8B8D68EAF3B36 /* [CP] Check Pods Manifest.lock */,
 				6945FD2023904562005E378A /* Sources */,
 				6945FD2123904562005E378A /* Frameworks */,
 				6945FD2223904562005E378A /* Resources */,
-				8C3DBEBB680A6B247814E86B /* [CP] Embed Pods Frameworks */,
+				F7350DEB5260372523475FB6 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -388,24 +388,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		8C3DBEBB680A6B247814E86B /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ReleaseVerify-cocoapod-macos-objc-tests/Pods-ReleaseVerify-cocoapod-macos-objc-tests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ReleaseVerify-cocoapod-macos-objc-tests/Pods-ReleaseVerify-cocoapod-macos-objc-tests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ReleaseVerify-cocoapod-macos-objc-tests/Pods-ReleaseVerify-cocoapod-macos-objc-tests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9E1441EADC4AF3E172B7B6F2 /* [CP] Check Pods Manifest.lock */ = {
+		5518D6B4B7F8B8D68EAF3B36 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -425,6 +408,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F7350DEB5260372523475FB6 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ReleaseVerify-cocoapod-macos-objc-tests/Pods-ReleaseVerify-cocoapod-macos-objc-tests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ReleaseVerify-cocoapod-macos-objc-tests/Pods-ReleaseVerify-cocoapod-macos-objc-tests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ReleaseVerify-cocoapod-macos-objc-tests/Pods-ReleaseVerify-cocoapod-macos-objc-tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -752,7 +752,7 @@
 		};
 		6945FD2A23904562005E378A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 243E7C04DC5D197BEADBE8E6 /* Pods-ReleaseVerify-cocoapod-macos-objc-tests.debug.xcconfig */;
+			baseConfigurationReference = 742730FAECEA859BC2F6411A /* Pods-ReleaseVerify-cocoapod-macos-objc-tests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -771,7 +771,7 @@
 		};
 		6945FD2B23904562005E378A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 223D8AD859225B3089FEBCC9 /* Pods-ReleaseVerify-cocoapod-macos-objc-tests.release.xcconfig */;
+			baseConfigurationReference = 07CE56EE5FB20AAB1C13C685 /* Pods-ReleaseVerify-cocoapod-macos-objc-tests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
