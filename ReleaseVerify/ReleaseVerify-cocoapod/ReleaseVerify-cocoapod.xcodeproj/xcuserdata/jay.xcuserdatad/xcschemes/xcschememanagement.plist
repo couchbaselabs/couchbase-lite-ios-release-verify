@@ -22,7 +22,7 @@
 		<key>ReleaseVerify-cocoapod-macos-swift-tests.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>6</integer>
+			<integer>4</integer>
 		</dict>
 		<key>ReleaseVerify-cocoapod.xcscheme_^#shared#^_</key>
 		<dict>

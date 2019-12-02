@@ -120,6 +120,10 @@ do
     # download and unzip if necessary
     download_unzip
 
+    # variable declaration
+    PROJECT_NAME="ReleaseVerify-binary"
+    PROJECT_PATH="${BASEDIR}/../ReleaseVerify/${PROJECT_NAME}"
+    
     declare -a devices=("ios" "macos")
     for DEVICE in "${devices[@]}"
     do
@@ -143,14 +147,21 @@ do
       fi
 
       # VERIFY THROUGH RELEASE-PROJECT
-      PROJECT="${BASEDIR}/../ReleaseVerify/ReleaseVerify-${DEVICE}-${LANG}/ReleaseVerify-${DEVICE}-${LANG}.xcodeproj"
-      SCHEME="ReleaseVerify-${DEVICE}-${LANG}Tests"
+      XCPROJECT="${PROJECT_PATH}/${PROJECT_NAME}.xcodeproj"
+      XCSCHEME="${PROJECT_NAME}-${LANG}-${DEVICE}-tests"
   
       # COPY FRAMEWORKS TO PROJECT
-      cp -Rv "${BASEDIR}/../$FOLDER/${DEVICE_SUBFOLDER_NAME}/${FRAMEWORK_NAME}" ${BASEDIR}/../ReleaseVerify/ReleaseVerify-${DEVICE}-${LANG}/Frameworks/${FRAMEWORK_NAME}
+      rm -rf "${PROJECT_PATH}/Frameworks/${FRAMEWORK_NAME}"
+      cp -Rv "${BASEDIR}/../$FOLDER/${DEVICE_SUBFOLDER_NAME}/${FRAMEWORK_NAME}" \
+        "${PROJECT_PATH}/Frameworks/${FRAMEWORK_NAME}"
   
-      # XCODE BUILD TEST PROJECT
-      xcodebuild test -project $PROJECT -scheme $SCHEME -destination "$DESTINATION" "ONLY_ACTIVE_ARCH=NO" "BITCODE_GENERATION_MODE=bitcode" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGN_IDENTITY=" "-quiet"
+      # XCODE TEST!!
+      xcodebuild test \
+        -project $XCPROJECT \
+        -scheme $XCSCHEME \
+        -destination "$DESTINATION" \
+        "ONLY_ACTIVE_ARCH=NO" "BITCODE_GENERATION_MODE=bitcode" \
+        "CODE_SIGNING_REQUIRED=NO" "CODE_SIGN_IDENTITY=" "-quiet"
       if [[ $? == 0 ]]
       then
           reports+=( "\xE2\x9C\x94 ${DEVICE}-${LANG}-${EDITION}" )
@@ -163,8 +174,7 @@ do
     # REMOVE ALL RELATED FILES
     rm -rf ${FOLDER}
     rm -rf ${BASEDIR}/../${FOLDER}
-    rm -rf ${BASEDIR}/../ReleaseVerify/ReleaseVerify-ios-${LANG}/Frameworks/${FRAMEWORK_NAME}
-    rm -rf ${BASEDIR}/../ReleaseVerify/ReleaseVerify-macos-${LANG}/Frameworks/${FRAMEWORK_NAME}
+    rm -rf "${PROJECT_PATH}/Frameworks/${FRAMEWORK_NAME}"
   done
 done
 
