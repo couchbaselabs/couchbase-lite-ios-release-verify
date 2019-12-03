@@ -1,23 +1,26 @@
 # Couchbase-lite-ios-release-verify
 This project can be used to verify the release builds. 
 
-## Steps (you need to be on VPN)
-1. Clone the repo. 
-2. `cd couchbase-lite-ios-release-verify/Scripts`
-3. Verify the Jenins/Downloads-page build 
-    - Jenkins build: `sh verify.sh -v <Version> -b <buildNumber>`. For example, `sh verify.sh -v 2.6.0 -b 137`
-    - Downloads page build: `sh verify.sh -v <version> -d`. For example, `sh verify.sh -v 2.5.2 -d`
+## Jenkins 
+- `sh verify.sh -v <Version> -b <buildNumber>`. For example, `sh verify.sh -v 2.6.0 -b 137`
+
+## Result
+<img width="375" alt="Jenkins" src="https://user-images.githubusercontent.com/10448770/60638763-84e8fd00-9dd4-11e9-859c-4d64d7ba3cd2.png">
+
+## Downloads Page
+- `sh verify.sh -v <version> -d`. For example, `sh verify.sh -v 2.5.2 -d`
 
 ## Result
 <img width="445" alt="Downloads" src="https://user-images.githubusercontent.com/10448770/60638762-84e8fd00-9dd4-11e9-8b22-6f9e113e18d1.png">
-<img width="375" alt="Jenkins" src="https://user-images.githubusercontent.com/10448770/60638763-84e8fd00-9dd4-11e9-859c-4d64d7ba3cd2.png">
-
-----
 
 ## Cocoapod Verification 
+- `sh Scripts/verify_cocoapod.sh -v <version>`. For example, `sh Scripts/verify_cocoapod.sh -v 2.6.3`
 
-### Steps
-1. `sh Scripts/verify_cocoapod.sh -v <version>`. Example `sh Scripts/verify_cocoapod.sh -v 2.6.3`
-
-### Results
+## Results
 <img width="288" alt="cocoapod" src="https://user-images.githubusercontent.com/10448770/69828963-e15d1680-11d2-11ea-9754-c7ddcf3590fa.png">
+
+## Carthage Verification 
+- `sh Scripts/verify.sh -v <version> --carthage`. For example, `sh Scripts/verify.sh -v 2.6.3 --carthage`
+
+## Results
+![carthage](https://user-images.githubusercontent.com/10448770/70013971-39c34980-152e-11ea-90c8-9b277c12e593.png)
