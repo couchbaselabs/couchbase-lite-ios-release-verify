@@ -8,10 +8,10 @@ This project can be used to verify the release builds.
 <img width="375" alt="Jenkins" src="https://user-images.githubusercontent.com/10448770/60638763-84e8fd00-9dd4-11e9-859c-4d64d7ba3cd2.png">
 
 ## Downloads Page
-- `sh verify.sh -v <version> -d`. For example, `sh verify.sh -v 2.5.2 -d`
+- `sh verify.sh -v <version> --downloads`. For example, `sh verify.sh -v 2.6.3 --downloads`
 
 ## Result
-<img width="445" alt="Downloads" src="https://user-images.githubusercontent.com/10448770/60638762-84e8fd00-9dd4-11e9-8b22-6f9e113e18d1.png">
+![Downloads](https://user-images.githubusercontent.com/10448770/70014284-2d8bbc00-152f-11ea-81b7-85466bdbe0b4.png)
 
 ## Cocoapod Verification 
 - `sh Scripts/verify_cocoapod.sh -v <version>`. For example, `sh Scripts/verify_cocoapod.sh -v 2.6.3`
