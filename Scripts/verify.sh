@@ -7,7 +7,7 @@ set -e
 function usage
 {
   echo "Usage for Validating from Jenkins build: ${0} -v <Version> -b <Build>"
-  echo "Usage for Validating from Downloads Page: ${0} -v <Version> -d"
+  echo "Usage for Validating from Downloads Page: ${0} -v <Version> --downloads"
   echo "Usage for Validating from Carthage: ${0} -v <Version> --carthage"
 }
 
@@ -22,7 +22,7 @@ while [[ $# -gt 0 ]]; do
       BUILD=${2}
       shift
       ;;
-      -d)
+      --downloads)
       DOWNLOADS="YES"
       ;;
       --carthage)
@@ -254,7 +254,7 @@ else
 fi
 
 echo "--------------------------------------"
-echo "Completed Verifying"
+echo "Verification Complete"
 echo "FROM: $FROM"
 echo "VERSION: $VERSION"
 echo "BUILD: $BUILD"
