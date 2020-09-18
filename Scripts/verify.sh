@@ -71,7 +71,7 @@ download_unzip()
   else
     # From the Jenkins location
     FILENAME=couchbase-lite-${LANG}_${EDITION}_${VERSION}-${BUILD}
-    URL=http://172.23.120.24/builds/latestbuilds/couchbase-lite-ios/$VERSION/$BUILD/${FILENAME}.zip
+    URL=http://latestbuilds.service.couchbase.com/builds/latestbuilds/couchbase-lite-ios/$VERSION/$BUILD/${FILENAME}.zip
   fi
   
   # >>>> Unzip
@@ -231,8 +231,8 @@ for LANG in "${langs[@]}"; do
         -project $XCPROJECT \
         -scheme $XCSCHEME \
         -destination "$DESTINATION" \
-        "ONLY_ACTIVE_ARCH=NO" "BITCODE_GENERATION_MODE=bitcode" \
         "CODE_SIGNING_REQUIRED=NO" "CODE_SIGN_IDENTITY=" "-quiet"
+        
       if [[ $? == 0 ]]; then
           reports+=( "\xE2\x9C\x94 ${DEVICE}-${LANG}-${EDITION}" )
       else
