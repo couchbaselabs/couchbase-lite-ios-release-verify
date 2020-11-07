@@ -167,6 +167,9 @@ cleanup()
 # ------------------------------
 echo "Starting to verify..."
 
+# cleanup in case any error happened in the script
+trap cleanup EXIT
+
 BASEDIR=$(dirname "$0")
 declare -a langs=("swift" "objc")
 declare -a edition=("enterprise" "community")

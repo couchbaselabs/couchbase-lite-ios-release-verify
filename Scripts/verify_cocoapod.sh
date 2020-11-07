@@ -36,90 +36,111 @@ echo "Starting to verify $VERSION..."
 BASEDIR=$(dirname "$0")
 PROJ_PREFIX="ReleaseVerify-cocoapod"
 
-# combinations
-declare -a langs=("swift" "objc")
-declare -a editions=("enterprise" "community")
-declare -a destinations=("ios" "macos")
-
 declare -a reports # for printing report at end
-for LANGUAGE in "${langs[@]}"
-do
-  for EDITION in "${editions[@]}"
-  do
-    for DESTIN in "${destinations[@]}"
-    do
 
-      # all variables
-      PROJECT_NAME="$PROJ_PREFIX"
-      PROJECT_PATH="${BASEDIR}/../ReleaseVerify/$PROJECT_NAME"
-      XCWORKSPACE=$PROJECT_PATH/$PROJECT_NAME.xcworkspace/
-      XCSCHEME="${PROJECT_NAME}-$DESTIN-$LANGUAGE-tests"
-      PODFILE="$PROJECT_PATH/Podfile"
-      
-      # create product name
-      PRODUCT="CouchbaseLite"
-      if [[ "$LANGUAGE" == "swift" ]]
-      then
-        PRODUCT="$PRODUCT-Swift"
-      fi
-      
-      if [[ "$EDITION" == "enterprise" ]]
-      then
-        PRODUCT="$PRODUCT-Enterprise"
-      fi
-      
-      # destination
-      if [[ "$DESTIN" == "ios" ]]
-      then
-        DESTINATION="platform=iOS Simulator,name=iPhone 8"
-      else
-        DESTINATION="generic/platform=OS X"
-      fi
-      
-      # platform
-      if [[ "$DESTIN" == "ios" ]]
-      then
-        PLATFORM="ios, '13.0'"
-      else
-        PLATFORM="osx, '10.11'"
-      fi
-      
-      # create and populate Podfile
-      rm -rf $PODFILE
-      echo "  platform :$PLATFORM " >> $PODFILE
-      echo "target '$XCSCHEME' do" >> $PODFILE
-      echo "  use_frameworks!" >> $PODFILE
-      echo "  pod '$PRODUCT', '$VERSION'" >> $PODFILE
-      echo "end" >> $PODFILE
-      
-      # pod install
-      pushd $PROJECT_PATH
-      pod install
-      popd
-      
-      xcodebuild test \
-        -workspace $XCWORKSPACE \
-        -scheme $XCSCHEME \
-        -destination "$DESTINATION" \
-        "ONLY_ACTIVE_ARCH=NO" "BITCODE_GENERATION_MODE=bitcode" \
-        "CODE_SIGNING_REQUIRED=NO" "CODE_SIGN_IDENTITY=" "-quiet"
-      
-      if [[ $? == 0 ]]
-      then
-          reports+=( "\xE2\x9C\x94 ${DESTIN}-${LANGUAGE}-${EDITION}" )
-      else
-          echo "Test Failed!!!"
-          reports+=( "x ${DESTIN}-${LANGUAGE}-${EDITION}" )
-      fi
-      
-      # remove artifacts
-      rm -rf $PODFILE
-      rm -rf "$PODFILE.lock"
-      rm -rf $PROJECT_PATH/Pods
-      rm -rf $XCWORKSPACE
-    done
-  done
-done
+function verify_cocoapod
+{
+  LANGUAGE=${1}
+  EDITION=${2}
+  DESTIN=${3}
+  
+  # all variables
+  PROJECT_NAME="$PROJ_PREFIX"
+  PROJECT_PATH="${BASEDIR}/../ReleaseVerify/$PROJECT_NAME"
+  XCWORKSPACE=$PROJECT_PATH/$PROJECT_NAME.xcworkspace/
+  XCSCHEME="${PROJECT_NAME}-$DESTIN-$LANGUAGE-tests"
+  PODFILE="$PROJECT_PATH/Podfile"
+  
+  function cleanup
+  {
+    # since cocoapod will make changes to the project file, revert it once done.
+    git checkout -- $PROJECT_PATH/ReleaseVerify-cocoapod.xcodeproj/project.pbxproj
+   
+    # remove artifacts
+    rm -rf $PROJECT_PATH/Pods
+    rm -rf $XCWORKSPACE
+    rm -rf $PODFILE
+    rm -rf "$PODFILE.lock"
+    rm -rf ReleaseVerify/ReleaseVerify-cocoapod/ReleaseVerify-cocoapod.xcodeproj/xcuserdata/
+  }
+  # in case error happened, do cleanup during exit
+  trap cleanup EXIT
+  
+  # create product name
+  PRODUCT="CouchbaseLite"
+  if [[ "$LANGUAGE" == "swift" ]]
+  then
+    PRODUCT="$PRODUCT-Swift"
+  fi
+  
+  if [[ "$EDITION" == "enterprise" ]]
+  then
+    PRODUCT="$PRODUCT-Enterprise"
+  fi
+  
+  # destination
+  if [[ "$DESTIN" == "ios" ]]
+  then
+    DESTINATION="platform=iOS Simulator,name=iPhone 8"
+  else
+    DESTINATION="platform=OS X,arch=x86_64"
+  fi
+  
+  # platform
+  if [[ "$DESTIN" == "ios" ]]
+  then
+  PLATFORM="ios, '13.0'"
+  else
+  PLATFORM="osx, '10.11'"
+  fi
+  
+  # create and populate Podfile
+  rm -rf $PODFILE
+  echo "platform :$PLATFORM " >> $PODFILE
+  echo " " >> $PODFILE
+  echo "target '$XCSCHEME' do" >> $PODFILE
+  echo "  use_frameworks!" >> $PODFILE
+  echo "  pod '$PRODUCT', '$VERSION'" >> $PODFILE
+  echo "end" >> $PODFILE
+  echo " " >> $PODFILE
+  echo "post_install do |installer|" >> $PODFILE
+  echo "  installer.pods_project.build_configurations.each do |config|" >> $PODFILE
+  echo "    config.build_settings[\"EXCLUDED_ARCHS[sdk=iphonesimulator*]\"] = \"arm64\"" >> $PODFILE
+  echo "  end" >> $PODFILE
+  echo "end" >> $PODFILE
+  
+  # pod install
+  pushd $PROJECT_PATH
+  pod install
+  popd
+  
+  xcodebuild test \
+    -workspace $XCWORKSPACE \
+    -scheme $XCSCHEME \
+    -destination "$DESTINATION" \
+    "BITCODE_GENERATION_MODE=bitcode" \
+    "CODE_SIGNING_REQUIRED=NO" "CODE_SIGN_IDENTITY=" "-quiet"
+  
+  if [[ $? == 0 ]]
+  then
+    reports+=( "\xE2\x9C\x94 ${DESTIN}-${LANGUAGE}-${EDITION}" )
+  else
+    echo "Test Failed!!!"
+    reports+=( "x ${DESTIN}-${LANGUAGE}-${EDITION}" )
+  fi
+  
+  cleanup
+}
+
+# verify all combination
+verify_cocoapod "swift" "enterprise" "ios"
+verify_cocoapod "swift" "enterprise" "macos"
+verify_cocoapod "swift" "community" "ios"
+verify_cocoapod "swift" "community" "macos"
+verify_cocoapod "objc" "enterprise" "ios"
+verify_cocoapod "objc" "enterprise" "macos"
+verify_cocoapod "objc" "community" "ios"
+verify_cocoapod "objc" "community" "macos"
 
 echo "-------------------------------"
 echo "Cocoapod Verification Complete"
