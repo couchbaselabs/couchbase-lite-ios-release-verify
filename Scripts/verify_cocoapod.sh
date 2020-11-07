@@ -4,7 +4,11 @@ set -e
 
 function usage
 {
-  echo "Usage: ${0} -v <Version>"
+  echo "Usage: "
+  echo "\t${0} -v <Version> [--excludeArch]"
+  echo "\t${0} -spec <path to local podspec> [--excludeArch]"
+  echo "\n  --excludeArch\t:\t Excludes the arm64 from the iphone simulator architecture. Remove this when switch to XCFramework"
+  echo "\n"
 }
 
 while [[ $# -gt 0 ]]
@@ -15,6 +19,13 @@ do
       VERSION=${2}
       shift
       ;;
+      -spec)
+      SPEC=${2}
+      shift
+      ;;
+      --excludeArch)
+      EXCLUDE_ARCH=YES
+      ;;
       *)
       usage
       exit 3
@@ -23,15 +34,15 @@ do
   shift
 done
 
-if [ -z "$VERSION" ]
+# require any of these params
+if [[ -z "$VERSION" ]] && [[ -z "$SPEC" ]]
 then
-  echo "Error: Please include version"
   usage
   exit 4
 fi
 
 # ------------------------------
-echo "Starting to verify $VERSION..."
+echo "Starting to verify $VERSION / $SPEC"
 
 BASEDIR=$(dirname "$0")
 PROJ_PREFIX="ReleaseVerify-cocoapod"
@@ -91,7 +102,7 @@ function verify_cocoapod
   then
   PLATFORM="ios, '13.0'"
   else
-  PLATFORM="osx, '10.11'"
+  PLATFORM="osx, '11.0'"
   fi
   
   # create and populate Podfile
@@ -100,14 +111,23 @@ function verify_cocoapod
   echo " " >> $PODFILE
   echo "target '$XCSCHEME' do" >> $PODFILE
   echo "  use_frameworks!" >> $PODFILE
-  echo "  pod '$PRODUCT', '$VERSION'" >> $PODFILE
+  if [[ -z "$SPEC" ]]
+  then
+    echo "  pod '$PRODUCT', '$VERSION'" >> $PODFILE
+  else
+    echo "  pod '$PRODUCT', :podspec => '$SPEC'" >> $PODFILE
+  fi
   echo "end" >> $PODFILE
   echo " " >> $PODFILE
-  echo "post_install do |installer|" >> $PODFILE
-  echo "  installer.pods_project.build_configurations.each do |config|" >> $PODFILE
-  echo "    config.build_settings[\"EXCLUDED_ARCHS[sdk=iphonesimulator*]\"] = \"arm64\"" >> $PODFILE
-  echo "  end" >> $PODFILE
-  echo "end" >> $PODFILE
+  
+  if [[ ! -z "$EXCLUDE_ARCH" ]]
+  then
+    echo "post_install do |installer|" >> $PODFILE
+    echo "  installer.pods_project.build_configurations.each do |config|" >> $PODFILE
+    echo "    config.build_settings[\"EXCLUDED_ARCHS[sdk=iphonesimulator*]\"] = \"arm64\"" >> $PODFILE
+    echo "  end" >> $PODFILE
+    echo "end" >> $PODFILE
+  fi
   
   # pod install
   pushd $PROJECT_PATH
