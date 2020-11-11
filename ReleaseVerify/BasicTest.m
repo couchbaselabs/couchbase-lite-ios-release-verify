@@ -65,7 +65,8 @@ NSString* dbName = @"release-verification";
         NSLog(@"Error saving a document: %@", error);
     }
     
-    [self run];
+    // skip replicating, since this will be ran on Jenkins
+    // [self run];
 }
 
 - (void) run {

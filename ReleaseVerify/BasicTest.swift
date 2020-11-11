@@ -45,7 +45,16 @@ class BasicTest: XCTestCase {
             XCTFail("Error Saving Document \(error.localizedDescription)");
         }
         
-        runReplicator()
+        let query = QueryBuilder
+            .select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(db))
+            .where(Expression.property("firstname").is(Expression.string("Pasin")))
+        
+        let results = try! query.execute().allResults()
+        XCTAssertEqual(results.count, 1)
+        
+        // skip replicating, since this will be running on Jenkins
+        // runReplicator()
     }
     
     func testDelete() {
@@ -61,7 +70,16 @@ class BasicTest: XCTestCase {
             XCTFail("Error Saving Document \(error.localizedDescription)");
         }
         
-        runReplicator()
+        let query = QueryBuilder
+            .select(SelectResult.expression(Meta.id))
+            .from(DataSource.database(db))
+            .where(Expression.property("firstname").is(Expression.string("Pasin")))
+        
+        let results = try! query.execute().allResults()
+        XCTAssertEqual(results.count, 0)
+        
+        // skip replicating, since this will be running on Jenkins
+        // runReplicator()
     }
     
     func runReplicator() {
