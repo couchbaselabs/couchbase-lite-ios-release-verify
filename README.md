@@ -19,8 +19,12 @@ For example, `sh verify.sh -v 2.6.3 --downloads`
 
 ## Cocoapod Verification 
 - `sh Scripts/verify_cocoapod.sh -v <version>`. 
+- `sh Scripts/verify_cocoapod.sh -spec <folder to all local specs>`. 
 
-For example, `sh Scripts/verify_cocoapod.sh -v 2.6.3`
+#### For example:
+* `sh Scripts/verify_cocoapod.sh -v 2.6.3`
+* `sh Scripts/verify_cocoapod.sh -v 2.6.3 --excludeArch`
+* `sh Scripts/verify_cocoapod.sh -spec ~/Documents/cbl_test/CBL_Test_Framework/`
 
 ## Results
 <img width="288" alt="cocoapod" src="https://user-images.githubusercontent.com/10448770/69828963-e15d1680-11d2-11ea-9754-c7ddcf3590fa.png">
