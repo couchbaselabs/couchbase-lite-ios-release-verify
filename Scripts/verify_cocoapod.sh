@@ -44,6 +44,9 @@ fi
 # ------------------------------
 echo "Starting to verify $VERSION / $SPEC"
 
+echo "Updating repo(pod repo update)..."
+pod repo update
+
 BASEDIR=$(dirname "$0")
 PROJ_PREFIX="ReleaseVerify-cocoapod"
 
