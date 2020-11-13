@@ -125,7 +125,10 @@ update_carthage_and_copy()
   if [[ "$EDITION" == "enterprise" ]]; then
     json="CouchbaseLite-Enterprise.json"
   fi
-  echo "binary \"https://packages.couchbase.com/releases/couchbase-lite-ios/carthage/$json\" == $VERSION" >> $cartfile
+  #cloudfront managed packages.couchbase.com might not have the latest immediately, when json is released
+  #thus, download from s3 directly to avoid this issue
+  curl -O "http://packages.couchbase.com.s3.amazonaws.com/releases/couchbase-lite-ios/carthage/$json"
+  echo "binary \"${PWD}/${json}\" == $VERSION" >> $cartfile
   pushd ${PROJECT_PATH}
   carthage update
   popd
@@ -136,6 +139,7 @@ update_carthage_and_copy()
     subfolder="iOS"
   fi
   CART_BIN_PATH="${PROJECT_PATH}/Carthage/Build/${subfolder}/${FRAMEWORK_NAME}"
+  mkdir -p ${PROJECT_PATH}/Frameworks
   cp -Rv "${CART_BIN_PATH}" "${PROJECT_PATH}/Frameworks/${FRAMEWORK_NAME}"
 }
 
