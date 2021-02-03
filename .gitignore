@@ -1,2 +1,5 @@
 .DS_Store
 ReleaseVerify/ReleaseVerify-binary/ReleaseVerify-binary.xcodeproj/project.xcworkspace/xcuserdata/*
+ReleaseVerify/ReleaseVerify-xcframework/ReleaseVerify-xcframework.xcodeproj/project.xcworkspace/xcuserdata/*
+ReleaseVerify/ReleaseVerify-xcframework/ReleaseVerify-xcframework.xcodeproj/xcuserdata/*
+
