@@ -9,6 +9,9 @@ DOWNLOADS_URL="https://packages.couchbase.com/releases/couchbase-lite-ios"
 
 IOS_SIMULATOR_DEST="platform=iOS Simulator,name=iPhone 12"
 
+BASEDIR=$(dirname "$0")
+RV_HOME="$BASEDIR/../ReleaseVerify"
+
 #######################################
 # Downloads and unzips the frameworks if necessary
 # Args:
@@ -22,7 +25,6 @@ download_unzip()
   FILENAME=$(basename $URL ".zip")
   # >>>> Unzip
   echo "Downloading $URL to $OUT"
-  mkdir "${OUT}"
   curl -O $URL -o $OUT
   
   echo "Unzipping..."

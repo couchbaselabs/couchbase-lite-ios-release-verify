@@ -4,11 +4,8 @@
 
 set -e
 
-BASEDIR=$(dirname "$0")
-XCHOME="$BASEDIR/../ReleaseVerify/ReleaseVerify-xcframework/"
-FRAMEWORKS_DIR=$XCHOME/Frameworks
-
 source ${BASEDIR}/utils.sh
+XCHOME="$RV_HOME/ReleaseVerify-xcframework/"
 
 function usage
 {
@@ -100,25 +97,25 @@ fi
 echo "Testing on $DESTINATION..."
 XCPATH="$XCHOME/ReleaseVerify-xcframework.xcodeproj"
 XCARGS="CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= -quiet"
-#xcodebuild clean test \
-#  -project $XCPATH \
-#  -scheme $SCHEME \
-#  -destination "$DESTINATION" \
-#  $XCARGS
+xcodebuild clean test \
+  -project $XCPATH \
+  -scheme $SCHEME \
+  -destination "$DESTINATION" \
+  $XCARGS
 
 ############  CATALYST
 if [[ "$SDK" == "iphonesimulator" ]]; then
   echo "Testing on Catalyst-$IOS_SIMULATOR_DEST..."
-#  xcodebuild clean test \
-#    -project $XCPATH \
-#    -scheme "$SCHEME-catalyst" \
-#    -destination "$IOS_SIMULATOR_DEST" \
-#    $XCARGS
+  xcodebuild clean test \
+    -project $XCPATH \
+    -scheme "$SCHEME-catalyst" \
+    -destination "$IOS_SIMULATOR_DEST" \
+    $XCARGS
 
   echo "Testing on Catalyst-platform=macOS,arch=$ARCH..."
-#  xcodebuild clean test \
-#    -project $XCPATH \
-#    -scheme "$SCHEME-catalyst" \
-#    -destination "platform=macOS,arch=$ARCH" \
-#    $XCARGS
+  xcodebuild clean test \
+    -project $XCPATH \
+    -scheme "$SCHEME-catalyst" \
+    -destination "platform=macOS,arch=$ARCH" \
+    $XCARGS
 fi
