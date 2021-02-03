@@ -25,11 +25,9 @@ download_unzip()
   FILENAME=$(basename $URL ".zip")
   # >>>> Unzip
   echo "Downloading $URL to $OUT"
-  curl -O $URL -o $OUT
+  cd $OUT && { curl -O $URL ; cd -; }
   
   echo "Unzipping..."
-  unzip ${OUT}/${FILENAME}.zip -d ${OUT}
+  unzip -o ${OUT}/${FILENAME}.zip -d ${OUT}
   rm -rf ${OUT}/${FILENAME}.zip
-  
-  mv ${OUT}/${FILENAME}/* ${OUT}/
 }

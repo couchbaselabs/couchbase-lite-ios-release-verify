@@ -49,8 +49,6 @@ if [ -z "$BUILD" ]; then
   exit 4
 fi
 
-BASEDIR=$(dirname "$0")
-
 function verify_xc
 {
   sh $BASEDIR/verify_xc.sh -l swift   -arch x86_64 -v $VERSION -b $BUILD -sdk iphonesimulator
@@ -67,6 +65,7 @@ function verify_xc
 echo "Removing Frameworks directory"
 FRAMEWORKS_DIR=${RV_HOME}/ReleaseVerify-xcframework/Frameworks
 rm -rf ${FRAMEWORKS_DIR}/*
+mkdir ${FRAMEWORKS_DIR}
 
 echo "Verifying XCFramework Enterprise Edition"
 download_unzip \

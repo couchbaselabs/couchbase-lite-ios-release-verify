@@ -4,6 +4,8 @@
 
 set -e
 
+BASEDIR=$(dirname "$0")
+
 source ${BASEDIR}/utils.sh
 XCHOME="$RV_HOME/ReleaseVerify-xcframework/"
 
