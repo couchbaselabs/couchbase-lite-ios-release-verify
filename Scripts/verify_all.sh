@@ -65,7 +65,6 @@ function verify_xc
 echo "Removing Frameworks directory"
 FRAMEWORKS_DIR=${RV_HOME}/ReleaseVerify-xcframework/Frameworks
 rm -rf ${FRAMEWORKS_DIR}/*
-mkdir ${FRAMEWORKS_DIR}
 
 echo "Verifying XCFramework Enterprise Edition"
 download_unzip \
