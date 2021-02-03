@@ -40,7 +40,7 @@ For example, `sh Scripts/verify.sh -v 2.6.3 --carthage`
 ## XCFramework Verification
 - `sh Scripts/verify_all.sh -v <version> --carthage`
 
-For example, `sh Scripts/verify.sh -v 2.8.4 -b 15`
+For example, `sh Scripts/verify_all.sh -v 2.8.4 -b 15`
 
 ## Results
 <img width="336" alt="Screen Shot 2021-02-03 at 4 34 51 AM" src="https://user-images.githubusercontent.com/10448770/106749943-07065c80-65dc-11eb-95ac-e482f9ba9e40.png">
