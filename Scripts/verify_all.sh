@@ -84,9 +84,18 @@ function verify_xc
   fi
 }
 
+function cleanup
+{
+  rm -rf ${FRAMEWORKS_DIR}/*
+  rm -rf ~/Library/Developer/Xcode/DerivedData
+}
+
+trap cleanup EXIT
+
 echo "Removing Frameworks directory"
 FRAMEWORKS_DIR=${RV_HOME}/ReleaseVerify-xcframework/Frameworks
 rm -rf ${FRAMEWORKS_DIR}/*
+rm -rf ~/Library/Developer/Xcode/DerivedData
 
 echo "Verifying XCFramework Enterprise Edition"
 download_unzip \
