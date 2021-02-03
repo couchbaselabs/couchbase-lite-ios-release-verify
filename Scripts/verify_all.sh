@@ -49,16 +49,38 @@ if [ -z "$BUILD" ]; then
   exit 4
 fi
 
+declare -a reports
+function report
+{
+  
+  if [[ $1 == 0 ]]; then
+      reports+=( "\xE2\x9C\x94 ${2}-${3}-${4}" )
+  else
+      echo "Test Failed!!!"
+      reports+=( "x ${2}-${3}-${4}" )
+  fi
+}
+
 function verify_xc
 {
-  sh $BASEDIR/verify_xc.sh -l swift   -arch x86_64 -v $VERSION -b $BUILD -sdk iphonesimulator
-  sh $BASEDIR/verify_xc.sh -l objc    -arch x86_64 -v $VERSION -b $BUILD -sdk iphonesimulator
-  sh $BASEDIR/verify_xc.sh -l swift   -arch x86_64 -v $VERSION -b $BUILD -sdk macosx
-  sh $BASEDIR/verify_xc.sh -l objc    -arch x86_64 -v $VERSION -b $BUILD -sdk macosx
+  sh $BASEDIR/verify_xc.sh -v $VERSION -b $BUILD -l swift -arch x86_64 -sdk iphonesimulator
+  report $? swift x86_64 iphonesimulator
+  
+  sh $BASEDIR/verify_xc.sh -v $VERSION -b $BUILD -l objc -arch x86_64 -sdk iphonesimulator
+  report $? objc x86_64 iphonesimulator
+  
+  sh $BASEDIR/verify_xc.sh -v $VERSION -b $BUILD -l swift -arch x86_64 -sdk macosx
+  report $? swift x86_64 macosx
+    
+  sh $BASEDIR/verify_xc.sh -v $VERSION -b $BUILD -l objc -arch x86_64 -sdk macosx
+  report $? objc x86_64 macosx
   
   if [[ "$(uname -m)" = "arm64" ]]; then
     sh $BASEDIR/verify_xc.sh -l swift -arch arm64 -v $VERSION -b $BUILD -sdk iphonesimulator
+    report $? swift arm64 iphonesimulator
+      
     sh $BASEDIR/verify_xc.sh -l objc  -arch arm64 -v $VERSION -b $BUILD -sdk iphonesimulator
+    report $? objc arm64 iphonesimulator
   fi
 }
 
@@ -70,7 +92,7 @@ echo "Verifying XCFramework Enterprise Edition"
 download_unzip \
   $LATESTBUILDS_URL/$VERSION/$BUILD/couchbase-lite-swift_xc_enterprise_${VERSION}-${BUILD}.zip \
   $FRAMEWORKS_DIR
-  
+
 download_unzip \
   $LATESTBUILDS_URL/$VERSION/$BUILD/couchbase-lite-objc_xc_enterprise_${VERSION}-${BUILD}.zip \
   $FRAMEWORKS_DIR
@@ -81,9 +103,17 @@ echo "Verifying XCFramework Community Edition"
 download_unzip \
   $LATESTBUILDS_URL/$VERSION/$BUILD/couchbase-lite-swift_xc_community_${VERSION}-${BUILD}.zip \
   $FRAMEWORKS_DIR
-  
+
 download_unzip \
   $LATESTBUILDS_URL/$VERSION/$BUILD/couchbase-lite-objc_xc_community_${VERSION}-${BUILD}.zip \
   $FRAMEWORKS_DIR
 
 verify_xc
+
+echo "--------------------------------------"
+echo "Verification Complete"
+echo "VERSION: $VERSION"
+echo "BUILD: $BUILD"
+echo "$(xcodebuild -version)"
+
+printf '%b\n' "${reports[@]}"
