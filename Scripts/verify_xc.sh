@@ -101,7 +101,7 @@ XCPATH="$XCHOME/ReleaseVerify-xcframework.xcodeproj"
 xcodebuild clean test \
   -project $XCPATH \
   -scheme $SCHEME \
-  -destination "$DESTINATION" \
+  -destination "$DESTINATION"
 
 ############  CATALYST
 if [[ "$SDK" == "iphonesimulator" ]]; then
@@ -109,11 +109,11 @@ if [[ "$SDK" == "iphonesimulator" ]]; then
   xcodebuild clean test \
     -project $XCPATH \
     -scheme "$SCHEME-catalyst" \
-    -destination "$IOS_SIMULATOR_DEST" \
+    -destination "$IOS_SIMULATOR_DEST"
 
   echo "Testing on Catalyst-platform=macOS,arch=$ARCH..."
   xcodebuild clean test \
     -project $XCPATH \
     -scheme "$SCHEME-catalyst" \
-    -destination "platform=macOS,arch=$ARCH" \
+    -destination "platform=macOS,arch=$ARCH"
 fi
