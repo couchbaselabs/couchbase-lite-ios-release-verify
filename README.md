@@ -38,7 +38,7 @@ For example, `sh Scripts/verify.sh -v 2.6.3 --carthage`
 ![carthage](https://user-images.githubusercontent.com/10448770/70013971-39c34980-152e-11ea-90c8-9b277c12e593.png)
 
 ## XCFramework Verification
-- `sh Scripts/verify_all.sh -v <version> --carthage`
+- `sh Scripts/verify_all.sh -v <version> -b <build>`
 
 For example, `sh Scripts/verify_all.sh -v 2.8.4 -b 15`
 
