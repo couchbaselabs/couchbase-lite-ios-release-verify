@@ -36,3 +36,13 @@ For example, `sh Scripts/verify.sh -v 2.6.3 --carthage`
 
 ## Results
 ![carthage](https://user-images.githubusercontent.com/10448770/70013971-39c34980-152e-11ea-90c8-9b277c12e593.png)
+
+## XCFramework Verification
+- `sh Scripts/verify_all.sh -v <version> -b <build>`
+
+For example, `sh Scripts/verify_all.sh -v 2.8.4 -b 15`
+
+## Results
+<img width="336" alt="Screen Shot 2021-02-03 at 4 34 51 AM" src="https://user-images.githubusercontent.com/10448770/106749943-07065c80-65dc-11eb-95ac-e482f9ba9e40.png">
+
+
