@@ -94,7 +94,13 @@ trap cleanup EXIT
 
 echo "Removing Frameworks directory"
 FRAMEWORKS_DIR=${RV_HOME}/ReleaseVerify-xcframework/Frameworks
-rm -rf ${FRAMEWORKS_DIR}/*
+if [[ -d $FRAMEWORKS_DIR ]]
+then
+  rm -rf ${FRAMEWORKS_DIR}/*
+else
+  mkdir ${FRAMEWORKS_DIR}
+fi
+
 rm -rf ~/Library/Developer/Xcode/DerivedData
 
 echo "Verifying XCFramework Enterprise Edition"
