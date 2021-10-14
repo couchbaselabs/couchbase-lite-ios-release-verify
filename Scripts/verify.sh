@@ -138,9 +138,10 @@ update_carthage_and_copy()
   if [[ "$DEVICE" == "ios" ]]; then
     subfolder="iOS"
   fi
-  CART_BIN_PATH="${PROJECT_PATH}/Carthage/Build/${subfolder}/${FRAMEWORK_NAME}"
+  
+  CART_BIN_PATH="${PROJECT_PATH}/Carthage/Build/"
   mkdir -p ${PROJECT_PATH}/Frameworks
-  cp -Rv "${CART_BIN_PATH}" "${PROJECT_PATH}/Frameworks/${FRAMEWORK_NAME}"
+  cp -Rv "${CART_BIN_PATH}" "${PROJECT_PATH}/Frameworks/"
 }
 
 #######################################
@@ -195,10 +196,11 @@ for LANG in "${langs[@]}"; do
     for DEVICE in "${devices[@]}"; do
       
       # Product Name
-      FRAMEWORK_NAME="CouchbaseLite.framework"
+      NAME="CouchbaseLite"
       if [[ "$LANG" == "swift" ]]; then
-        FRAMEWORK_NAME="CouchbaseLiteSwift.framework"
+        NAME="CouchbaseLiteSwift"
       fi
+      FRAMEWORK_NAME="${NAME}.framework"
 
       # VERIFY THROUGH RELEASE-PROJECT
       XCPROJECT="${PROJECT_PATH}/${PROJECT_NAME}.xcodeproj"
