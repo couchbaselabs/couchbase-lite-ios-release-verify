@@ -3,30 +3,28 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1ADC1BF427186F2F00A6A332 /* CouchbaseLiteSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1ADC1BF327186F2F00A6A332 /* CouchbaseLiteSwift.xcframework */; };
+		1ADC1BF6271870D300A6A332 /* CouchbaseLite.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1ADC1BF5271870D300A6A332 /* CouchbaseLite.xcframework */; };
+		1ADC1BF7271870D300A6A332 /* CouchbaseLite.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1ADC1BF5271870D300A6A332 /* CouchbaseLite.xcframework */; };
+		1ADC1BF8271870D300A6A332 /* CouchbaseLite.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1ADC1BF5271870D300A6A332 /* CouchbaseLite.xcframework */; };
+		1ADC1BF9271870D300A6A332 /* CouchbaseLite.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1ADC1BF5271870D300A6A332 /* CouchbaseLite.xcframework */; };
+		1ADC1BFA271870D700A6A332 /* CouchbaseLiteSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1ADC1BF327186F2F00A6A332 /* CouchbaseLiteSwift.xcframework */; };
+		1ADC1BFB271870D800A6A332 /* CouchbaseLiteSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1ADC1BF327186F2F00A6A332 /* CouchbaseLiteSwift.xcframework */; };
+		1ADC1BFC271870D900A6A332 /* CouchbaseLiteSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1ADC1BF327186F2F00A6A332 /* CouchbaseLiteSwift.xcframework */; };
 		694500032395C43E005E378A /* BasicTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 694500012395C43D005E378A /* BasicTest.m */; };
 		694500052395C43E005E378A /* BasicTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 694500012395C43D005E378A /* BasicTest.m */; };
 		694500062395C527005E378A /* BasicTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6945FFFC2395C422005E378A /* BasicTest.swift */; };
 		694500072395C528005E378A /* BasicTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6945FFFC2395C422005E378A /* BasicTest.swift */; };
-		694500082395C56B005E378A /* CouchbaseLiteSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6945FFF72395C40A005E378A /* CouchbaseLiteSwift.framework */; };
-		694500092395C56B005E378A /* CouchbaseLiteSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6945FFF72395C40A005E378A /* CouchbaseLiteSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		6945000D2395C5CD005E378A /* CouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6945000B2395C5CD005E378A /* CouchbaseLite.framework */; };
-		6945000F2395C5CD005E378A /* CouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6945000B2395C5CD005E378A /* CouchbaseLite.framework */; };
-		694500102395C60D005E378A /* CouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6945000B2395C5CD005E378A /* CouchbaseLite.framework */; };
-		694500112395C60D005E378A /* CouchbaseLite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6945000B2395C5CD005E378A /* CouchbaseLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		694500142395C6B8005E378A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6945FFBD2395C357005E378A /* main.m */; };
 		694500152395C6C4005E378A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6945FFB92395C357005E378A /* LaunchScreen.storyboard */; };
 		694500162395C6CA005E378A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6945FFAC2395C356005E378A /* AppDelegate.m */; };
 		694500172395C6CA005E378A /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6945FFAF2395C356005E378A /* SceneDelegate.m */; };
 		694500182395C6CA005E378A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6945FFB22395C356005E378A /* ViewController.m */; };
 		694500192395C6E0005E378A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6945FFB42395C356005E378A /* Main.storyboard */; };
-		6945001A2395CFDD005E378A /* CouchbaseLiteSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6945FFF72395C40A005E378A /* CouchbaseLiteSwift.framework */; };
-		6945001B2395CFDD005E378A /* CouchbaseLiteSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6945FFF72395C40A005E378A /* CouchbaseLiteSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		6945001D2395D07A005E378A /* CouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6945000B2395C5CD005E378A /* CouchbaseLite.framework */; };
-		6945001E2395D07A005E378A /* CouchbaseLite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6945000B2395C5CD005E378A /* CouchbaseLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6945FF622395C240005E378A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6945FF612395C240005E378A /* AppDelegate.swift */; };
 		6945FF642395C240005E378A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6945FF632395C240005E378A /* SceneDelegate.swift */; };
 		6945FF662395C240005E378A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6945FF652395C240005E378A /* ViewController.swift */; };
@@ -43,8 +41,6 @@
 		6945FFDD2395C38D005E378A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6945FFDC2395C38D005E378A /* Assets.xcassets */; };
 		6945FFE02395C38D005E378A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6945FFDE2395C38D005E378A /* Main.storyboard */; };
 		6945FFE32395C38D005E378A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6945FFE22395C38D005E378A /* main.m */; };
-		6945FFF92395C40A005E378A /* CouchbaseLiteSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6945FFF72395C40A005E378A /* CouchbaseLiteSwift.framework */; };
-		6945FFFB2395C40A005E378A /* CouchbaseLiteSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6945FFF72395C40A005E378A /* CouchbaseLiteSwift.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,7 +81,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				694500092395C56B005E378A /* CouchbaseLiteSwift.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -96,7 +91,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				694500112395C60D005E378A /* CouchbaseLite.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -107,7 +101,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				6945001B2395CFDD005E378A /* CouchbaseLiteSwift.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -118,7 +111,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				6945001E2395D07A005E378A /* CouchbaseLite.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -126,8 +118,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1ADC1BF327186F2F00A6A332 /* CouchbaseLiteSwift.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = CouchbaseLiteSwift.xcframework; sourceTree = "<group>"; };
+		1ADC1BF5271870D300A6A332 /* CouchbaseLite.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = CouchbaseLite.xcframework; sourceTree = "<group>"; };
 		694500012395C43D005E378A /* BasicTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BasicTest.m; path = ../../BasicTest.m; sourceTree = "<group>"; };
-		6945000B2395C5CD005E378A /* CouchbaseLite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CouchbaseLite.framework; sourceTree = "<group>"; };
 		6945FF5E2395C240005E378A /* ReleaseVerify-binary-swift-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ReleaseVerify-binary-swift-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6945FF612395C240005E378A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6945FF632395C240005E378A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -173,7 +166,6 @@
 		6945FFE42395C38D005E378A /* ReleaseVerify_binary_objc_macos.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ReleaseVerify_binary_objc_macos.entitlements; sourceTree = "<group>"; };
 		6945FFEC2395C39E005E378A /* ReleaseVerify-binary-objc-macos-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ReleaseVerify-binary-objc-macos-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6945FFF02395C39E005E378A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6945FFF72395C40A005E378A /* CouchbaseLiteSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CouchbaseLiteSwift.framework; sourceTree = "<group>"; };
 		6945FFFC2395C422005E378A /* BasicTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BasicTest.swift; path = ../../BasicTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -182,7 +174,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				694500082395C56B005E378A /* CouchbaseLiteSwift.framework in Frameworks */,
+				1ADC1BF427186F2F00A6A332 /* CouchbaseLiteSwift.xcframework in Frameworks */,
+				1ADC1BF6271870D300A6A332 /* CouchbaseLite.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -190,7 +183,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6945FFF92395C40A005E378A /* CouchbaseLiteSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,7 +190,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6945001A2395CFDD005E378A /* CouchbaseLiteSwift.framework in Frameworks */,
+				1ADC1BF7271870D300A6A332 /* CouchbaseLite.xcframework in Frameworks */,
+				1ADC1BFA271870D700A6A332 /* CouchbaseLiteSwift.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,7 +199,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6945FFFB2395C40A005E378A /* CouchbaseLiteSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -214,7 +206,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				694500102395C60D005E378A /* CouchbaseLite.framework in Frameworks */,
+				1ADC1BF8271870D300A6A332 /* CouchbaseLite.xcframework in Frameworks */,
+				1ADC1BFB271870D800A6A332 /* CouchbaseLiteSwift.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,7 +215,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6945000D2395C5CD005E378A /* CouchbaseLite.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,7 +222,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6945001D2395D07A005E378A /* CouchbaseLite.framework in Frameworks */,
+				1ADC1BF9271870D300A6A332 /* CouchbaseLite.xcframework in Frameworks */,
+				1ADC1BFC271870D900A6A332 /* CouchbaseLiteSwift.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,7 +231,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6945000F2395C5CD005E378A /* CouchbaseLite.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -374,8 +366,8 @@
 		6945FFF62395C40A005E378A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				6945000B2395C5CD005E378A /* CouchbaseLite.framework */,
-				6945FFF72395C40A005E378A /* CouchbaseLiteSwift.framework */,
+				1ADC1BF5271870D300A6A332 /* CouchbaseLite.xcframework */,
+				1ADC1BF327186F2F00A6A332 /* CouchbaseLiteSwift.xcframework */,
 			);
 			path = Frameworks;
 			sourceTree = "<group>";

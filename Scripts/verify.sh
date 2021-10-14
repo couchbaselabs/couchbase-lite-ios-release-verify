@@ -36,6 +36,8 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
+BASEDIR=$(dirname "$0")
+
 if [ -z "$VERSION" ]; then
   echo "Error: Please include version"
   usage
@@ -66,11 +68,11 @@ download_unzip()
   # >>>> Fetch Downloads URL / Framework Path
   if [[ "$DOWNLOADS" == "YES" ]]; then
     # From the Downloads page
-    FILENAME=couchbase-lite-${LANG}_${EDITION}_${VERSION}
+    FILENAME=couchbase-lite-${LANG}_xc_${EDITION}_${VERSION}
     URL=https://packages.couchbase.com/releases/couchbase-lite-ios/$VERSION/${FILENAME}.zip
   else
     # From the Jenkins location
-    FILENAME=couchbase-lite-${LANG}_${EDITION}_${VERSION}-${BUILD}
+    FILENAME=couchbase-lite-${LANG}_xc_${EDITION}_${VERSION}-${BUILD}
     URL=http://latestbuilds.service.couchbase.com/builds/latestbuilds/couchbase-lite-ios/$VERSION/$BUILD/${FILENAME}.zip
   fi
   
@@ -175,7 +177,6 @@ echo "Starting to verify..."
 # cleanup in case any error happened in the script
 trap cleanup EXIT
 
-BASEDIR=$(dirname "$0")
 declare -a langs=("swift" "objc")
 declare -a edition=("enterprise" "community")
 
@@ -200,7 +201,7 @@ for LANG in "${langs[@]}"; do
       if [[ "$LANG" == "swift" ]]; then
         NAME="CouchbaseLiteSwift"
       fi
-      FRAMEWORK_NAME="${NAME}.framework"
+      FRAMEWORK_NAME="${NAME}.xcframework"
 
       # VERIFY THROUGH RELEASE-PROJECT
       XCPROJECT="${PROJECT_PATH}/${PROJECT_NAME}.xcodeproj"
@@ -215,16 +216,10 @@ for LANG in "${langs[@]}"; do
       # COPY FRAMEWORKS TO PROJECT
       rm -rf "${PROJECT_PATH}/Frameworks/${FRAMEWORK_NAME}"
       if [ -z "$CARTHAGE" ]; then
-        DEVICE_SUBFOLDER_NAME="macOS"
-        if [[ "$DEVICE" == "ios" ]]; then
-          DEVICE_SUBFOLDER_NAME="iOS"
-        fi
-      
-        PLIST=${BASEDIR}/../$FILENAME/iOS/${FRAMEWORK_NAME}/Info.plist
+        PLIST=${BASEDIR}/../$FILENAME/${FRAMEWORK_NAME}/ios-arm64_armv7/${NAME}.framework/Info.plist
         verify_version $PLIST
         
-        cp -Rv "${BASEDIR}/../$FILENAME/${DEVICE_SUBFOLDER_NAME}/${FRAMEWORK_NAME}" \
-          "${PROJECT_PATH}/Frameworks/${FRAMEWORK_NAME}"
+        cp -Rv "${BASEDIR}/../$FILENAME/" "${PROJECT_PATH}/Frameworks/"
       else
         # CARTHAGE
         update_carthage_and_copy
