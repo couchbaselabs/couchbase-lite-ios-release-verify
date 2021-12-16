@@ -2,8 +2,6 @@
 #
 # Validate the Couchbase iOS builds from various sources
 
-set -e
-
 function usage
 {
   echo "Usage for Validating from Jenkins build: ${0} -v <Version> -b <Build>"
@@ -52,14 +50,15 @@ fi
 
 #######################################
 # Downloads and unzips the frameworks if necessary
+# Arguments:
+#   LANGUAGE
+#   EDITION
 # Globals:
 #   FILENAME
 #   URL
 # Used:
 #   DOWNLOADS
 #   BASEDIR
-#   LANG
-#   EDITION
 #   VERSION
 #   BUILD
 #######################################
@@ -68,11 +67,11 @@ download_unzip()
   # >>>> Fetch Downloads URL / Framework Path
   if [[ "$DOWNLOADS" == "YES" ]]; then
     # From the Downloads page
-    FILENAME=couchbase-lite-${LANG}_xc_${EDITION}_${VERSION}
+    FILENAME=couchbase-lite-${1}_xc_${2}_${VERSION}
     URL=https://packages.couchbase.com/releases/couchbase-lite-ios/$VERSION/${FILENAME}.zip
   else
     # From the Jenkins location
-    FILENAME=couchbase-lite-${LANG}_xc_${EDITION}_${VERSION}-${BUILD}
+    FILENAME=couchbase-lite-${1}_xc_${2}_${VERSION}-${BUILD}
     URL=http://latestbuilds.service.couchbase.com/builds/latestbuilds/couchbase-lite-ios/$VERSION/$BUILD/${FILENAME}.zip
   fi
   
@@ -181,14 +180,43 @@ declare -a langs=("swift" "objc")
 declare -a edition=("enterprise" "community")
 
 declare -a reports
-for LANG in "${langs[@]}"; do
-  for EDITION in "${edition[@]}"; do
-  
-    # download and unzip if necessary(not if carthage)
-    if [ -z "$CARTHAGE" ]; then
-      download_unzip
-    fi
+for EDITION in "${edition[@]}"; do
+  # download and unzip if necessary(not if carthage)
+  if [ -z "$CARTHAGE" ]; then
+    FR_PATH="${BASEDIR}/../ReleaseVerify/ReleaseVerify-binary/Frameworks"
+    rm -rf "${FR_PATH}/*"
+    
+    # download and verify version - swift
+    echo "downloading swift..."
+    download_unzip swift $EDITION
+    
+    echo "verifying swift version..."
+    PLIST="${BASEDIR}/../$FILENAME/CouchbaseLiteSwift.xcframework/ios-arm64_armv7/CouchbaseLiteSwift.framework/Info.plist"
+    verify_version $PLIST
+    
+    echo "copying swift..."
+    cp -Rv "${BASEDIR}/../$FILENAME/" "${FR_PATH}/"
+    
+    # download and verify version - objc
+    echo "downloading objc..."
+    download_unzip objc $EDITION
+    
+    echo "verifying objc version..."
+    PLIST="${BASEDIR}/../$FILENAME/CouchbaseLite.xcframework/ios-arm64_armv7/CouchbaseLite.framework/Info.plist"
+    verify_version $PLIST
+    
+    echo "copying objc..."
+    cp -Rv "${BASEDIR}/../$FILENAME/" "${FR_PATH}/"
+  else
+    # CARTHAGE
+    update_carthage_and_copy
 
+    # FIXME: current script is creating Carthage with wrong version
+    # PLIST=${CART_BIN_PATH}/Info.plist
+    # verify_version $PLIST
+  fi
+  
+  for LANG in "${langs[@]}"; do
     # variable declaration
     PROJECT_NAME="ReleaseVerify-binary"
     PROJECT_PATH="${BASEDIR}/../ReleaseVerify/${PROJECT_NAME}"
@@ -213,23 +241,6 @@ for LANG in "${langs[@]}"; do
         DESTINATION="platform=iOS Simulator,name=iPhone 11"
       fi
   
-      # COPY FRAMEWORKS TO PROJECT
-      rm -rf "${PROJECT_PATH}/Frameworks/${FRAMEWORK_NAME}"
-      if [ -z "$CARTHAGE" ]; then
-        PLIST=${BASEDIR}/../$FILENAME/${FRAMEWORK_NAME}/ios-arm64_armv7/${NAME}.framework/Info.plist
-        verify_version $PLIST
-        
-        cp -Rv "${BASEDIR}/../$FILENAME/" "${PROJECT_PATH}/Frameworks/"
-      else
-        # CARTHAGE
-        update_carthage_and_copy
-        
-        # FIXME: current script is creating Carthage with wrong version
-        # PLIST=${CART_BIN_PATH}/Info.plist
-        # verify_version $PLIST
-      fi
-      
-  
       # XCODE TEST!!
       xcodebuild test \
         -project $XCPROJECT \
@@ -244,9 +255,8 @@ for LANG in "${langs[@]}"; do
           reports+=( "x ${DEVICE}-${LANG}-${EDITION}" )
       fi
     done
-    
-    cleanup
   done
+  cleanup
 done
 
 if [[ "$DOWNLOADS" == "YES" ]]; then
