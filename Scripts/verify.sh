@@ -34,7 +34,7 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
-BASEDIR=$(dirname "$0")
+BASEDIR=$(dirname "$1")/$(dirname "$0")
 
 if [ -z "$VERSION" ]; then
   echo "Error: Please include version"
@@ -181,6 +181,8 @@ declare -a edition=("enterprise" "community")
 
 declare -a reports
 for EDITION in "${edition[@]}"; do
+  PROJECT_NAME="ReleaseVerify-binary"
+  PROJECT_PATH="${BASEDIR}/../ReleaseVerify/${PROJECT_NAME}"
   # download and unzip if necessary(not if carthage)
   if [ -z "$CARTHAGE" ]; then
     FR_PATH="${BASEDIR}/../ReleaseVerify/ReleaseVerify-binary/Frameworks"
@@ -217,9 +219,6 @@ for EDITION in "${edition[@]}"; do
   fi
   
   for LANG in "${langs[@]}"; do
-    # variable declaration
-    PROJECT_NAME="ReleaseVerify-binary"
-    PROJECT_PATH="${BASEDIR}/../ReleaseVerify/${PROJECT_NAME}"
     
     declare -a devices=("ios" "macos")
     for DEVICE in "${devices[@]}"; do
