@@ -64,6 +64,7 @@ function verify_cocoapod
   XCWORKSPACE=$PROJECT_PATH/$PROJECT_NAME.xcworkspace/
   XCSCHEME="${PROJECT_NAME}-$DESTIN-$LANGUAGE-tests"
   PODFILE="$PROJECT_PATH/Podfile"
+  TEST_SIMULATOR=$(xcrun xctrace list devices 2>&1 | grep -oE 'iPhone.*?[^\(]+' | head -1 | sed 's/Simulator//g' | awk '{$1=$1;print}')
   
   function cleanup
   {
@@ -95,17 +96,17 @@ function verify_cocoapod
   # destination
   if [[ "$DESTIN" == "ios" ]]
   then
-    DESTINATION="platform=iOS Simulator,name=iPhone 8"
+    DESTINATION="platform=iOS Simulator,name=${TEST_SIMULATOR}"
   else
-    DESTINATION="platform=OS X,arch=x86_64"
+    DESTINATION="platform=macOS,arch=x86_64"
   fi
   
   # platform
   if [[ "$DESTIN" == "ios" ]]
   then
-  PLATFORM="ios, '13.0'"
+  PLATFORM="ios, '11.0'"
   else
-  PLATFORM="osx, '11.0'"
+  PLATFORM="macos, '10.14'"
   fi
   
   # create and populate Podfile
