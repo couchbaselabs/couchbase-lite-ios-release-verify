@@ -52,9 +52,6 @@ class BasicTest: XCTestCase {
         
         let results = try! query.execute().allResults()
         XCTAssertEqual(results.count, 1)
-        
-        // skip replicating, since this will be running on Jenkins
-        // runReplicator()
     }
     
     func testDelete() {
@@ -77,31 +74,5 @@ class BasicTest: XCTestCase {
         
         let results = try! query.execute().allResults()
         XCTAssertEqual(results.count, 0)
-        
-        // skip replicating, since this will be running on Jenkins
-        // runReplicator()
     }
-    
-    func runReplicator() {
-        let x = self.expectation(description: "change")
-        let endpoint = URLEndpoint.init(url: URL.init(string: "ws://localhost:4984/\(dbName)")!)
-        let replConfig = ReplicatorConfiguration.init(database: db, target: endpoint)
-        repl = Replicator.init(config: replConfig)
-        
-        let token = repl.addChangeListener { (change) in
-            let status = change.status
-            if let err = status.error as NSError?, err.code != 0 {
-                XCTFail("\(status.error!.localizedDescription)")
-            }
-            if status.activity == .stopped {
-                x.fulfill()
-            }
-        }
-        
-        repl.start()
-        wait(for: [x], timeout: 10.0)
-        
-        repl.removeChangeListener(withToken: token)
-    }
-
 }

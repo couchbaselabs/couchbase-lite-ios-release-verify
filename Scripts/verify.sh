@@ -34,8 +34,6 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
-BASEDIR=$(dirname "$1")/$(dirname "$0")
-
 if [ -z "$VERSION" ]; then
   echo "Error: Please include version"
   usage
@@ -46,6 +44,16 @@ if [ -z "$BUILD" ] && [ -z "$DOWNLOADS" ] && [ -z "$CARTHAGE" ]; then
   echo "Error: Please include build number or download flag or carthage flag"
   usage
   exit 4
+fi
+
+BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+if [[ "$DOWNLOADS" == "YES" ]]; then
+  FROM="Downloads Page"
+elif [[ "$CARTHAGE" == "YES" ]]; then
+  FROM="Carthage"
+else
+  FROM="Jenkins(http://172.23.120.24/builds/latestbuilds/couchbase-lite-ios/)"
 fi
 
 #######################################
@@ -97,7 +105,7 @@ download_unzip()
 #######################################
 verify_version()
 {
-  echo "Verifying Info Plist"
+  echo "Verifying Info Plist : $1"
   local info_ver=$(plutil -extract CFBundleShortVersionString xml1 -o - $1 | sed -n "s/.*<string>\(.*\)<\/string>.*/\1/p")
   if [[ (-z $info_ver) || ("$info_ver" != "$VERSION") ]]; then
     echo "Version Mismatch! extracted($info_ver) & expected($VERSION) => path $1"
@@ -158,12 +166,14 @@ update_carthage_and_copy()
 cleanup()
 {
   if [ -z "$CARTHAGE" ]; then
-    rm -rf ${FILENAME}
-    rm -rf ${BASEDIR}/../${FILENAME}
+    rm -rf couchbase-lite-swift_xc*.zip
+    rm -rf couchbase-lite-objc_xc*.zip
+    rm -rf "${BASEDIR}/.."/couchbase-lite-swift_xc*
+    rm -rf "${BASEDIR}/.."/couchbase-lite-objc_xc*
   else
-    rm -rf ${PROJECT_PATH}/Cartfile
-    rm -rf ${PROJECT_PATH}/Cartfile.resolved
-    rm -rf ${PROJECT_PATH}/Carthage
+    rm -rf "${PROJECT_PATH}/Cartfile"
+    rm -rf "${PROJECT_PATH}/Cartfile.resolved"
+    rm -rf "${PROJECT_PATH}/Carthage"
   fi
   rm -rf "${PROJECT_PATH}/Frameworks/${FRAMEWORK_NAME}"
 }
@@ -178,8 +188,10 @@ trap cleanup EXIT
 
 declare -a langs=("swift" "objc")
 declare -a edition=("enterprise" "community")
-
 declare -a reports
+
+TEST_SIMULATOR=$(xcrun xctrace list devices 2>&1 | grep -oE 'iPhone.*?[^\(]+' | head -1 | sed 's/Simulator//g' | awk '{$1=$1;print}')
+
 for EDITION in "${edition[@]}"; do
   PROJECT_NAME="ReleaseVerify-binary"
   PROJECT_PATH="${BASEDIR}/../ReleaseVerify/${PROJECT_NAME}"
@@ -193,7 +205,7 @@ for EDITION in "${edition[@]}"; do
     download_unzip swift $EDITION
     
     echo "verifying swift version..."
-    PLIST="${BASEDIR}/../$FILENAME/CouchbaseLiteSwift.xcframework/ios-arm64_armv7/CouchbaseLiteSwift.framework/Info.plist"
+    PLIST="${BASEDIR}/../$FILENAME/CouchbaseLiteSwift.xcframework/ios-arm64/CouchbaseLiteSwift.framework/Info.plist"
     verify_version $PLIST
     
     echo "copying swift..."
@@ -204,7 +216,7 @@ for EDITION in "${edition[@]}"; do
     download_unzip objc $EDITION
     
     echo "verifying objc version..."
-    PLIST="${BASEDIR}/../$FILENAME/CouchbaseLite.xcframework/ios-arm64_armv7/CouchbaseLite.framework/Info.plist"
+    PLIST="${BASEDIR}/../$FILENAME/CouchbaseLite.xcframework/ios-arm64/CouchbaseLite.framework/Info.plist"
     verify_version $PLIST
     
     echo "copying objc..."
@@ -217,9 +229,8 @@ for EDITION in "${edition[@]}"; do
     # PLIST=${CART_BIN_PATH}/Info.plist
     # verify_version $PLIST
   fi
-  
+
   for LANG in "${langs[@]}"; do
-    
     declare -a devices=("ios" "macos")
     for DEVICE in "${devices[@]}"; do
       
@@ -237,7 +248,7 @@ for EDITION in "${edition[@]}"; do
       # set destination
       DESTINATION="platform=OS X"
       if [[ "$DEVICE" == "ios" ]]; then
-        DESTINATION="platform=iOS Simulator,name=iPhone 11"
+        DESTINATION="platform=iOS Simulator,name=${TEST_SIMULATOR}"
       fi
   
       # XCODE TEST!!
@@ -257,14 +268,6 @@ for EDITION in "${edition[@]}"; do
   done
   cleanup
 done
-
-if [[ "$DOWNLOADS" == "YES" ]]; then
-  FROM="Downloads Page"
-elif [[ "$CARTHAGE" == "YES" ]]; then
-  FROM="Carthage"
-else
-  FROM="Jenkins(http://172.23.120.24/builds/latestbuilds/couchbase-lite-ios/)"
-fi
 
 echo "--------------------------------------"
 echo "Verification Complete"

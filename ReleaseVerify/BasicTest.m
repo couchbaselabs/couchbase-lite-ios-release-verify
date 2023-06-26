@@ -64,31 +64,6 @@ NSString* dbName = @"release-verification";
     } else {
         NSLog(@"Error saving a document: %@", error);
     }
-    
-    // skip replicating, since this will be ran on Jenkins
-    // [self run];
-}
-
-- (void) run {
-    XCTestExpectation* x = [self expectationWithDescription: @"Replicator Stopped"];
-    CBLURLEndpoint *endpoint = [[CBLURLEndpoint alloc] initWithURL: [NSURL URLWithString: @"ws://localhost:4984/release-verification"]];
-    CBLReplicatorConfiguration *config = [[CBLReplicatorConfiguration alloc] initWithDatabase: self.db
-                                                                                       target: endpoint];
-    _repl = [[CBLReplicator alloc] initWithConfig: config];
-    CBLReplicator* replicator = _repl;
-    id token = [_repl addChangeListener: ^(CBLReplicatorChange* change) {
-        CBLReplicatorStatus* st = change.status;
-        assert(st.error.code == 0);
-        
-        if (st.activity == kCBLReplicatorStopped) {
-            [x fulfill];
-        }
-    }];
-    
-    [_repl start];
-    
-    [self waitForExpectations: @[x] timeout: 5.0];
-    [replicator removeChangeListenerWithToken: token];
 }
 
 @end
