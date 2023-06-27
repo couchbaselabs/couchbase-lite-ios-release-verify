@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "couchbase-lite-swift-ee",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/couchbase/couchbase-lite-swift-ee",
+      "state" : {
+        "revision" : "ee2fb1bdefffdd87b5622cf0bbcff275421b9e6c",
+        "version" : "3.0.2"
+      }
+    }
+  ],
+  "version" : 2
+}

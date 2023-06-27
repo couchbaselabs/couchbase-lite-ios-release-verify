@@ -1,22 +1,24 @@
-//
-//  BasicTest.swift
-//  ReleaseVerify-iOS-SwiftTests
-//
-//  Created by Jayahari Vavachan on 6/24/19.
-//  Copyright © 2019 Couchbase Inc. All rights reserved.
-//
-
 import XCTest
 import CouchbaseLiteSwift
 
-class BasicTest: XCTestCase {
+@testable import ReleaseVerify_SPM_CE
+
+final class ReleaseVerify_SPM_CETests: XCTestCase {
+    let directory = NSTemporaryDirectory().appending("CBLSPMTest")
     let dbName = "release-verification"
     var db: Database!
 
     override func setUp() {
-        try! Database.delete(withName: dbName, inDirectory: nil)
+        let dir = self.directory
+        if FileManager.default.fileExists(atPath: dir) {
+            try! FileManager.default.removeItem(atPath: dir)
+        }
+        FileManager.default.fileExists(atPath: dir)
         
-        db = try! Database(name: dbName, config: DatabaseConfiguration.init())
+        var config = DatabaseConfiguration()
+        config.directory = dir
+        try! db = Database.init(name: "db", config: config)
+        
         NSLog("Database: %@", db.path!)
     }
     
@@ -36,7 +38,6 @@ class BasicTest: XCTestCase {
         
         do {
             try db.saveDocument(doc)
-            NSLog(">>>>>> Successfully saving the document");
         } catch let error as NSError {
             XCTFail("Error Saving Document \(error.localizedDescription)");
         }

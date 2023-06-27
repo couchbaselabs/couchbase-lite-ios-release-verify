@@ -11,7 +11,6 @@
 
 @interface BasicTest : XCTestCase
 
-@property(nonatomic, strong) CBLReplicator* repl;
 @property(nonatomic, strong) CBLDatabase* db;
 
 @end
@@ -21,8 +20,6 @@ NSString* dbName = @"release-verification";
 @implementation BasicTest
 
 - (void)setUp {
-//    CBLDatabase.log.console.level = kCBLLogLevelDebug;
-    
     NSError *error;
     [CBLDatabase deleteDatabase: dbName inDirectory: nil error: &error];
     
@@ -39,8 +36,6 @@ NSString* dbName = @"release-verification";
 }
     
 - (void) tearDown {
-    _repl = nil;
-    
     NSError* error;
     [self.db close: &error];
     
@@ -51,10 +46,10 @@ NSString* dbName = @"release-verification";
     CBLMutableDocument *doc = [[CBLMutableDocument alloc] init];
     NSLog(@"Document: %@", doc.id);
     
-    [doc setValue:@"Pasin" forKey:@"firstname"];
-    [doc setValue:@"Suriyentrakorn" forKey:@"lastname"];
+    [doc setValue:@"John" forKey:@"firstname"];
+    [doc setValue:@"Doe" forKey:@"lastname"];
     
-    NSString* str = @"CouchbaseLite 2.0";
+    NSString* str = @"CouchbaseLite Database";
     NSData* data = [str dataUsingEncoding:NSUTF8StringEncoding];
     [doc setValue:[[CBLBlob alloc] initWithContentType:@"text/plain" data:data] forKey:@"blob"];
     
