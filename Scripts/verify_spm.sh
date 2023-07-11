@@ -30,16 +30,6 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
-function cleanup {
-  pushd "${CE_SRC_DIR}" > /dev/null
-  cp Package.swift.bak Package.swift
-  popd > /dev/null
-
-  pushd "${EE_SRC_DIR}" > /dev/null
-  cp Package.swift.bak Package.swift
-  popd > /dev/null
-}
-
 BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 CE_SRC_DIR="${BASEDIR}/../ReleaseVerify/ReleaseVerify-SPM-CE"
 EE_SRC_DIR="${BASEDIR}/../ReleaseVerify/ReleaseVerify-SPM-EE"
@@ -47,7 +37,6 @@ EE_SRC_DIR="${BASEDIR}/../ReleaseVerify/ReleaseVerify-SPM-EE"
 if [ -z "$VERSION" ]; then
   echo "Verifying with the version specified in Package.swift ..."
 else
-  trap cleanup EXIT
   echo "Verifying with version : ${VERSION}"
 
   if [ "$TEST_CE" = true ]; then
