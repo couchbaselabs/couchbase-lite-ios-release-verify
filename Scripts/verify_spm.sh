@@ -50,18 +50,30 @@ else
   trap cleanup EXIT
   echo "Verifying with version : ${VERSION}"
 
-  if [ "$TEST_CE" = true ] || [ -z "$TEST_CE" ]; then
+  if [ "$TEST_CE" = true ]; then
     pushd "${CE_SRC_DIR}" > /dev/null
+    echo "package CE schimbat"
     cp Package.swift Package.swift.bak
     sed -i '' "s/exact: \".*\"/exact: \"${VERSION}\"/" Package.swift
     popd > /dev/null
-  fi
-
-  if [ "$TEST_EE" = true ] || [ -z "$TEST_EE" ]; then
+  elif [ "$TEST_EE" = true ]; then
     pushd "${EE_SRC_DIR}" > /dev/null
+    echo "package EE schimbat"
     cp Package.swift Package.swift.bak
     sed -i '' "s/exact: \".*\"/exact: \"${VERSION}\"/" Package.swift
     popd > /dev/null
+  else
+  pushd "${CE_SRC_DIR}" > /dev/null
+  echo "package CE schimbat"
+  cp Package.swift Package.swift.bak
+  sed -i '' "s/exact: \".*\"/exact: \"${VERSION}\"/" Package.swift
+  popd > /dev/null
+
+  pushd "${EE_SRC_DIR}" > /dev/null
+  echo "package EE schimbat"
+  cp Package.swift Package.swift.bak
+  sed -i '' "s/exact: \".*\"/exact: \"${VERSION}\"/" Package.swift
+  popd > /dev/null
   fi
 fi
 
@@ -96,7 +108,7 @@ if [ "$TEST_EE" = true ]; then
   popd > /dev/null
 fi
 
-if [ "$TEST_CE" != true ] && [ "$TEST_EE" != true ]; then
+if [ -z "$TEST_CE" ] && [ -z "$TEST_EE" ]; then
   echo "Running both Community Edition and Enterprise Edition tests ..."
 
   echo "Community Edition Test ..."
@@ -125,14 +137,14 @@ fi
 echo "--------------------------------------"
 echo "Verification Complete"
 echo "FROM: SPM"
+
 if [ "$TEST_CE" = true ]; then
   echo "VERSION: CE-${CE_VERSION}"
-fi
-if [ "$TEST_EE" = true ]; then
-  echo "VERSION: CE-${EE_VERSION}"
-fi
-if [ "$TEST_CE" != true ] && [ "$TEST_EE" != true ]; then
+elif [ "$TEST_EE" = true ]; then
+  echo "VERSION: EE-${EE_VERSION}"
+else
   echo echo "VERSION: CE-${CE_VERSION}, EE-${EE_VERSION}"
 fi
+
 echo "$(xcodebuild -version)"
 printf '%b\n' "${reports[@]}"
