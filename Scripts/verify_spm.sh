@@ -41,13 +41,11 @@ else
 
   if [ "$TEST_CE" = true ]; then
     pushd "${CE_SRC_DIR}" > /dev/null
-    echo "package CE schimbat"
     cp Package.swift Package.swift.bak
     sed -i '' "s/exact: \".*\"/exact: \"${VERSION}\"/" Package.swift
     popd > /dev/null
   elif [ "$TEST_EE" = true ]; then
     pushd "${EE_SRC_DIR}" > /dev/null
-    echo "package EE schimbat"
     cp Package.swift Package.swift.bak
     sed -i '' "s/exact: \".*\"/exact: \"${VERSION}\"/" Package.swift
     popd > /dev/null
@@ -59,7 +57,6 @@ else
   popd > /dev/null
 
   pushd "${EE_SRC_DIR}" > /dev/null
-  echo "package EE schimbat"
   cp Package.swift Package.swift.bak
   sed -i '' "s/exact: \".*\"/exact: \"${VERSION}\"/" Package.swift
   popd > /dev/null
