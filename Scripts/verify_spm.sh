@@ -51,7 +51,6 @@ else
     popd > /dev/null
   else
   pushd "${CE_SRC_DIR}" > /dev/null
-  echo "package CE schimbat"
   cp Package.swift Package.swift.bak
   sed -i '' "s/exact: \".*\"/exact: \"${VERSION}\"/" Package.swift
   popd > /dev/null
