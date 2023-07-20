@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "ReleaseVerify-SPM-EE",
     dependencies: [
-        .package(url: "https://github.com/couchbase/couchbase-lite-swift-ee", exact: "3.0.2")
+        .package(url: "https://github.com/couchbase/couchbase-lite-swift-ee", branch: "new-release")
     ],
     targets: [
         .executableTarget(
