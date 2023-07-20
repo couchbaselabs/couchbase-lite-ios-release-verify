@@ -37,7 +37,7 @@ final class ReleaseVerify_SPM_CETests: XCTestCase {
         doc.setValue(Blob(contentType: "text/plain", data: data!), forKey: "blob")
         
         do {
-            try db.saveDocument(doc)
+            try db.defaultCollection().save(document: doc)
         } catch let error as NSError {
             XCTFail("Error Saving Document \(error.localizedDescription)");
         }

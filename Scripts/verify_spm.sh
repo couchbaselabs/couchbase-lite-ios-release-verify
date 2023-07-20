@@ -35,29 +35,31 @@ CE_SRC_DIR="${BASEDIR}/../ReleaseVerify/ReleaseVerify-SPM-CE"
 EE_SRC_DIR="${BASEDIR}/../ReleaseVerify/ReleaseVerify-SPM-EE"
 
 if [ -z "$VERSION" ]; then
-  echo "Verifying with the version specified in Package.swift ..."
+  VERSION="new-release-branch"
+  echo "Verifying new release ..."
+
 else
   echo "Verifying with version : ${VERSION}"
 
   if [ "$TEST_CE" = true ]; then
     pushd "${CE_SRC_DIR}" > /dev/null
     cp Package.swift Package.swift.bak
-    sed -i '' "s/exact: \".*\"/exact: \"${VERSION}\"/" Package.swift
+    sed -i '' "s/branch: \".*\"/exact: \"${VERSION}\"/" Package.swift
     popd > /dev/null
   elif [ "$TEST_EE" = true ]; then
     pushd "${EE_SRC_DIR}" > /dev/null
     cp Package.swift Package.swift.bak
-    sed -i '' "s/exact: \".*\"/exact: \"${VERSION}\"/" Package.swift
+    sed -i '' "s/branch: \".*\"/exact: \"${VERSION}\"/" Package.swift
     popd > /dev/null
   else
   pushd "${CE_SRC_DIR}" > /dev/null
   cp Package.swift Package.swift.bak
-  sed -i '' "s/exact: \".*\"/exact: \"${VERSION}\"/" Package.swift
+  sed -i '' "s/branch: \".*\"/exact: \"${VERSION}\"/" Package.swift
   popd > /dev/null
 
   pushd "${EE_SRC_DIR}" > /dev/null
   cp Package.swift Package.swift.bak
-  sed -i '' "s/exact: \".*\"/exact: \"${VERSION}\"/" Package.swift
+  sed -i '' "s/branch: \".*\"/exact: \"${VERSION}\"/" Package.swift
   popd > /dev/null
   fi
 fi
@@ -70,7 +72,6 @@ echo "Verification Complete"
 if [ "$TEST_CE" = true ]; then
   echo "Community Edition Test ..."
   pushd "${CE_SRC_DIR}" > /dev/null
-  CE_VERSION=$(grep -o "exact: \".*\"" Package.swift | sed 's/.*"\(.*\)\".*/\1/')
   swift test
   if [[ $? == 0 ]]; then
     reports+=( "\xE2\x9C\x94 Community Edition" )
@@ -83,7 +84,6 @@ fi
 if [ "$TEST_EE" = true ]; then
   echo "Enterprise Edition Test ..."
   pushd "${EE_SRC_DIR}" > /dev/null
-  EE_VERSION=$(grep -o "exact: \".*\"" Package.swift | sed 's/.*"\(.*\)\".*/\1/')
   swift test
   if [[ $? == 0 ]]; then
     reports+=( "\xE2\x9C\x94 Enterprise Edition" )
@@ -98,7 +98,6 @@ if [ -z "$TEST_CE" ] && [ -z "$TEST_EE" ]; then
 
   echo "Community Edition Test ..."
   pushd "${CE_SRC_DIR}" > /dev/null
-  CE_VERSION=$(grep -o "exact: \".*\"" Package.swift | sed 's/.*"\(.*\)\".*/\1/')
   swift test
   if [[ $? == 0 ]]; then
     reports+=( "\xE2\x9C\x94 Community Edition" )
@@ -109,7 +108,6 @@ if [ -z "$TEST_CE" ] && [ -z "$TEST_EE" ]; then
 
   echo "Enterprise Edition Test ..."
   pushd "${EE_SRC_DIR}" > /dev/null
-  EE_VERSION=$(grep -o "exact: \".*\"" Package.swift | sed 's/.*"\(.*\)\".*/\1/')
   swift test
   if [[ $? == 0 ]]; then
     reports+=( "\xE2\x9C\x94 Enterprise Edition" )
@@ -124,11 +122,11 @@ echo "Verification Complete"
 echo "FROM: SPM"
 
 if [ "$TEST_CE" = true ]; then
-  echo "VERSION: CE-${CE_VERSION}"
+  echo "VERSION: CE-${VERSION}"
 elif [ "$TEST_EE" = true ]; then
-  echo "VERSION: EE-${EE_VERSION}"
+  echo "VERSION: EE-${VERSION}"
 else
-  echo echo "VERSION: CE-${CE_VERSION}, EE-${EE_VERSION}"
+  echo echo "VERSION: CE-${VERSION}, EE-${VERSION}"
 fi
 
 echo "$(xcodebuild -version)"
