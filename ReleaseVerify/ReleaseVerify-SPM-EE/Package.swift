@@ -10,7 +10,7 @@ let package = Package(
         .iOS(.v11), .macOS(.v10_14)
     ],
     dependencies: [
-        .package(url: "https://github.com/couchbase/couchbase-lite-swift-ee", branch: "new-release")
+        .package(url: "https://github.com/couchbase/couchbase-lite-swift-ee", exact: "3.0.2")
     ],
     targets: [
         .executableTarget(

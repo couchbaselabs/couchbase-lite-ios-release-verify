@@ -4,16 +4,25 @@
 
 function usage
 {
-  echo "Usage : ${0} [-v <Version>] [-ce|-ee]"
-  echo "NOTE 1: When the version is specified, the script will replace the existing version in Package.swift with the specified version before running the script."
+  echo "Usage: ${0} [-v <Version> | -b <Branch>] [-ce|-ee]"
+  echo "NOTE 1: When the version or branch is specified, the script will replace the existing version in Package.swift with the specified version before running the script."
   echo "NOTE 2: When neither flavour is specified, the script will run both CE and EE."
 }
+
+VERSION=""
+BRANCH=""
+TEST_CE=false
+TEST_EE=false
 
 while [[ $# -gt 0 ]]; do
   key=${1}
   case $key in
     -v)
       VERSION=${2}
+      shift
+      ;;
+    -b)
+      BRANCH=${2}
       shift
       ;;
     -ce)
@@ -30,36 +39,72 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
+if ! $TEST_CE && ! $TEST_EE; then
+  TEST_CE=true
+  TEST_EE=true
+fi
+
+# Validate the arguments
+if [[ -n "$VERSION" && -n "$BRANCH" ]]; then
+  echo "Error: You can only specify either -v or -b flag, not both."
+  usage
+  exit 1
+fi
+
 BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 CE_SRC_DIR="${BASEDIR}/../ReleaseVerify/ReleaseVerify-SPM-CE"
 EE_SRC_DIR="${BASEDIR}/../ReleaseVerify/ReleaseVerify-SPM-EE"
 
-if [ -z "$VERSION" ]; then
-  VERSION="new-release-branch"
-  echo "Verifying new release ..."
+if [ -n "$VERSION" ]; then
+  echo "Verifying with version: ${VERSION}"
+elif [ -n "$BRANCH" ]; then
+  echo "Verifying with branch: ${BRANCH}"
+elif
+  echo "Verifying with current Package.swift, version: ${VERSION}"
+fi
 
-else
-  echo "Verifying with version : ${VERSION}"
-
+if [ -n "$BRANCH" ]; then
   if [ "$TEST_CE" = true ]; then
     pushd "${CE_SRC_DIR}" > /dev/null
     cp Package.swift Package.swift.bak
-    sed -i '' "s/branch: \".*\"/exact: \"${VERSION}\"/" Package.swift
+    sed -i '' "s/exact: \".*\"/branch: \"${BRANCH}\"/" Package.swift
     popd > /dev/null
   elif [ "$TEST_EE" = true ]; then
     pushd "${EE_SRC_DIR}" > /dev/null
     cp Package.swift Package.swift.bak
-    sed -i '' "s/branch: \".*\"/exact: \"${VERSION}\"/" Package.swift
+    sed -i '' "s/exact: \".*\"/branch: \"${BRANCH}\"/" Package.swift
     popd > /dev/null
   else
   pushd "${CE_SRC_DIR}" > /dev/null
   cp Package.swift Package.swift.bak
-  sed -i '' "s/branch: \".*\"/exact: \"${VERSION}\"/" Package.swift
+  sed -i '' "s/exact: \".*\"/branch: \"${BRANCH}\"/" Package.swift
   popd > /dev/null
 
   pushd "${EE_SRC_DIR}" > /dev/null
   cp Package.swift Package.swift.bak
-  sed -i '' "s/branch: \".*\"/exact: \"${VERSION}\"/" Package.swift
+  sed -i '' "s/exact: \".*\"/branch: \"${BRANCH}\"/" Package.swift
+  popd > /dev/null
+  fi
+elif
+  if [ "$TEST_CE" = true ]; then
+    pushd "${CE_SRC_DIR}" > /dev/null
+    cp Package.swift Package.swift.bak
+    sed -i '' "s/exact: \".*\"/exact: \"${VERSION}\"/" Package.swift
+    popd > /dev/null
+  elif [ "$TEST_EE" = true ]; then
+    pushd "${EE_SRC_DIR}" > /dev/null
+    cp Package.swift Package.swift.bak
+    sed -i '' "s/exact: \".*\"/exact: \"${VERSION}\"/" Package.swift
+    popd > /dev/null
+  else
+  pushd "${CE_SRC_DIR}" > /dev/null
+  cp Package.swift Package.swift.bak
+  sed -i '' "s/exact: \".*\"/exact: \"${VERSION}\"/" Package.swift
+  popd > /dev/null
+
+  pushd "${EE_SRC_DIR}" > /dev/null
+  cp Package.swift Package.swift.bak
+  sed -i '' "s/exact: \".*\"/exact: \"${VERSION}\"/" Package.swift
   popd > /dev/null
   fi
 fi
@@ -120,13 +165,22 @@ fi
 echo "--------------------------------------"
 echo "Verification Complete"
 echo "FROM: SPM"
-
-if [ "$TEST_CE" = true ]; then
-  echo "VERSION: CE-${VERSION}"
-elif [ "$TEST_EE" = true ]; then
-  echo "VERSION: EE-${VERSION}"
-else
-  echo echo "VERSION: CE-${VERSION}, EE-${VERSION}"
+if [ -n "$BRANCH" ]; then
+  if [ "$TEST_CE" = true ]; then
+  echo "BRANCH: CE ${$BRANCH}"
+  elif [ "$TEST_EE" = true ]; then
+    echo "BRANCH: EE ${$BRANCH}"
+  else
+    echo "BRANCH: CE ${$BRANCH}, EE-${$BRANCH}"
+  fi
+elif
+  if [ "$TEST_CE" = true ]; then
+  echo "VERSION: CE-${CE_VERSION}"
+  elif [ "$TEST_EE" = true ]; then
+    echo "VERSION: EE-${EE_VERSION}"
+  else
+    echo "VERSION: CE-${CE_VERSION}, EE-${EE_VERSION}"
+  fi
 fi
 
 echo "$(xcodebuild -version)"
