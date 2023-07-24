@@ -59,52 +59,88 @@ if [ -n "$VERSION" ]; then
   echo "Verifying with version: ${VERSION}"
 elif [ -n "$BRANCH" ]; then
   echo "Verifying with branch: ${BRANCH}"
-elif
+else
   echo "Verifying with current Package.swift, version: ${VERSION}"
 fi
+
+function modify_package_version
+{
+  if [ -f "Package.swift.bak" ]; then
+      # If .bak is already existing, the script has been run previously... cleanup
+      echo "Cleanup..."
+      mv Package.swift.bak Package.swift
+      cp Package.swift Package.swift.bak
+    else
+      cp Package.swift Package.swift.bak
+    fi
+    sed -i '' "s/exact: \".*\"/exact: \"${VERSION}\"/" Package.swift
+}
+
+function modify_package_branch
+{
+  if [ -f "Package.swift.bak" ]; then
+      # If .bak is already existing, the script has been run previously... cleanup
+      mv Package.swift.bak Package.swift
+    else
+      cp Package.swift Package.swift.bak
+    fi
+    sed -i '' "s/exact: \".*\"/branch: \"${BRANCH}\"/" Package.swift
+}
+
+function test_ce
+{
+  swift test
+  if [[ $? == 0 ]]; then
+    reports+=( "\xE2\x9C\x94 Community Edition" )
+  else
+    reports+=( "x Community Edition" )
+  fi
+}
+
+function test_ee
+{
+  swift test
+  if [[ $? == 0 ]]; then
+    reports+=( "\xE2\x9C\x94 Enterprise Edition" )
+  else
+    reports+=( "x Enterprise Edition" )
+  fi
+}
 
 if [ -n "$BRANCH" ]; then
   if [ "$TEST_CE" = true ]; then
     pushd "${CE_SRC_DIR}" > /dev/null
-    cp Package.swift Package.swift.bak
-    sed -i '' "s/exact: \".*\"/branch: \"${BRANCH}\"/" Package.swift
+    modify_package_branch
     popd > /dev/null
   elif [ "$TEST_EE" = true ]; then
     pushd "${EE_SRC_DIR}" > /dev/null
-    cp Package.swift Package.swift.bak
-    sed -i '' "s/exact: \".*\"/branch: \"${BRANCH}\"/" Package.swift
+    modify_package_branch
     popd > /dev/null
   else
   pushd "${CE_SRC_DIR}" > /dev/null
-  cp Package.swift Package.swift.bak
-  sed -i '' "s/exact: \".*\"/branch: \"${BRANCH}\"/" Package.swift
+  modify_package_branch
   popd > /dev/null
 
   pushd "${EE_SRC_DIR}" > /dev/null
-  cp Package.swift Package.swift.bak
-  sed -i '' "s/exact: \".*\"/branch: \"${BRANCH}\"/" Package.swift
+  modify_package_branch
   popd > /dev/null
   fi
-elif
+else
   if [ "$TEST_CE" = true ]; then
     pushd "${CE_SRC_DIR}" > /dev/null
-    cp Package.swift Package.swift.bak
-    sed -i '' "s/exact: \".*\"/exact: \"${VERSION}\"/" Package.swift
+    modify_package_version
     popd > /dev/null
   elif [ "$TEST_EE" = true ]; then
     pushd "${EE_SRC_DIR}" > /dev/null
-    cp Package.swift Package.swift.bak
-    sed -i '' "s/exact: \".*\"/exact: \"${VERSION}\"/" Package.swift
+    modify_package_version
     popd > /dev/null
   else
   pushd "${CE_SRC_DIR}" > /dev/null
-  cp Package.swift Package.swift.bak
-  sed -i '' "s/exact: \".*\"/exact: \"${VERSION}\"/" Package.swift
+  modify_package_version
   popd > /dev/null
 
   pushd "${EE_SRC_DIR}" > /dev/null
-  cp Package.swift Package.swift.bak
-  sed -i '' "s/exact: \".*\"/exact: \"${VERSION}\"/" Package.swift
+  modify_package_version
   popd > /dev/null
   fi
 fi
@@ -117,24 +153,14 @@ echo "Verification Complete"
 if [ "$TEST_CE" = true ]; then
   echo "Community Edition Test ..."
   pushd "${CE_SRC_DIR}" > /dev/null
-  swift test
-  if [[ $? == 0 ]]; then
-    reports+=( "\xE2\x9C\x94 Community Edition" )
-  else
-    reports+=( "x Community Edition" )
-  fi
+  test_ce
   popd > /dev/null
 fi
 
 if [ "$TEST_EE" = true ]; then
   echo "Enterprise Edition Test ..."
   pushd "${EE_SRC_DIR}" > /dev/null
-  swift test
-  if [[ $? == 0 ]]; then
-    reports+=( "\xE2\x9C\x94 Enterprise Edition" )
-  else
-    reports+=( "x Enterprise Edition" )
-  fi
+  test_ee
   popd > /dev/null
 fi
 
@@ -143,22 +169,12 @@ if [ -z "$TEST_CE" ] && [ -z "$TEST_EE" ]; then
 
   echo "Community Edition Test ..."
   pushd "${CE_SRC_DIR}" > /dev/null
-  swift test
-  if [[ $? == 0 ]]; then
-    reports+=( "\xE2\x9C\x94 Community Edition" )
-  else
-    reports+=( "x Community Edition" )
-  fi
+  test_ce
   popd > /dev/null
 
   echo "Enterprise Edition Test ..."
   pushd "${EE_SRC_DIR}" > /dev/null
-  swift test
-  if [[ $? == 0 ]]; then
-    reports+=( "\xE2\x9C\x94 Enterprise Edition" )
-  else
-    reports+=( "x Enterprise Edition" )
-  fi
+  test_ee
   popd > /dev/null
 fi
 
@@ -167,19 +183,19 @@ echo "Verification Complete"
 echo "FROM: SPM"
 if [ -n "$BRANCH" ]; then
   if [ "$TEST_CE" = true ]; then
-  echo "BRANCH: CE ${$BRANCH}"
+    echo "BRANCH: CE" $BRANCH
   elif [ "$TEST_EE" = true ]; then
-    echo "BRANCH: EE ${$BRANCH}"
+    echo "BRANCH: EE" $BRANCH
   else
-    echo "BRANCH: CE ${$BRANCH}, EE-${$BRANCH}"
+    echo "BRANCH: CE+EE" $BRANCH
   fi
-elif
+else
   if [ "$TEST_CE" = true ]; then
-  echo "VERSION: CE-${CE_VERSION}"
+    echo "VERSION: CE" $VERSION
   elif [ "$TEST_EE" = true ]; then
-    echo "VERSION: EE-${EE_VERSION}"
+    echo "VERSION: EE" $VERSION
   else
-    echo "VERSION: CE-${CE_VERSION}, EE-${EE_VERSION}"
+    echo "VERSION: CE+EE" $VERSION
   fi
 fi
 
