@@ -81,6 +81,7 @@ function modify_package_branch
   if [ -f "Package.swift.bak" ]; then
       # If .bak is already existing, the script has been run previously... cleanup
       mv Package.swift.bak Package.swift
+      cp Package.swift Package.swift.bak
     else
       cp Package.swift Package.swift.bak
     fi
