@@ -66,8 +66,8 @@ fi
 function modify_package_version
 {
   if [ -f "Package.swift.bak" ]; then
-      # If .bak is already existing, the script has been run previously... cleanup
-      echo "Cleanup..."
+      # If .bak is already existing, the script has been run previously... cleanup is needed because on how we parse - see below
+      echo "Script has been previously run - cleaning up..."
       mv Package.swift.bak Package.swift
       cp Package.swift Package.swift.bak
     else
@@ -79,7 +79,7 @@ function modify_package_version
 function modify_package_branch
 {
   if [ -f "Package.swift.bak" ]; then
-      # If .bak is already existing, the script has been run previously... cleanup
+      # If .bak is already existing, the script has been run previously... cleanup is needed because on how we parse - see below
       mv Package.swift.bak Package.swift
       cp Package.swift Package.swift.bak
     else
