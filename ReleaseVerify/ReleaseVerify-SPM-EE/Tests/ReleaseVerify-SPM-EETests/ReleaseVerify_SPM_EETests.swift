@@ -15,6 +15,8 @@ final class ReleaseVerify_SPM_EETests: XCTestCase {
         }
         FileManager.default.fileExists(atPath: dir)
         
+        try! Extension.enableVectorSearch()
+
         var config = DatabaseConfiguration()
         config.directory = dir
         try! db = Database.init(name: "db", config: config)

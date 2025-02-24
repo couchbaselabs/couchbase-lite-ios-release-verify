@@ -1,3 +1,3 @@
-# ReleaseVerify-SPM-CE
+# ReleaseVerify-SPM-EE
 
 A description of this package.

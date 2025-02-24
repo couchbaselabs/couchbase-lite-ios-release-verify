@@ -5,12 +5,11 @@ import PackageDescription
 
 let package = Package(
     name: "ReleaseVerify-SPM-CE",
-    // platforms specified for Helium as XCode 14.2 defaults to ios 11 and macos 10.13 which is incompatible with product being ios 11 and macos 10.14
     platforms: [
-        .iOS(.v11), .macOS(.v10_14)
+        .iOS(.v12), .macOS(.v12)
     ],
     dependencies: [
-        .package(url: "https://github.com/couchbase/couchbase-lite-ios.git", exact: "3.0.2")
+        .package(url: "https://github.com/couchbase/couchbase-lite-ios.git", exact: "3.2.1")
     ],
     targets: [
         .executableTarget(
