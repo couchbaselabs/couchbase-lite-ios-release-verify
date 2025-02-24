@@ -26,6 +26,7 @@ class BasicTest: XCTestCase {
     }
 
     func testSave() {
+        let defaultColl = try! self.db.defaultCollection()
         let doc = MutableDocument()
         doc.setValue("John", forKey: "firstname")
         doc.setValue("Doe", forKey: "lastname")
@@ -35,7 +36,7 @@ class BasicTest: XCTestCase {
         doc.setValue(Blob(contentType: "text/plain", data: data!), forKey: "blob")
         
         do {
-            try db.saveDocument(doc)
+            try defaultColl.save(document: doc)
             NSLog(">>>>>> Successfully saving the document");
         } catch let error as NSError {
             XCTFail("Error Saving Document \(error.localizedDescription)");

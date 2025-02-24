@@ -43,6 +43,9 @@ NSString* dbName = @"release-verification";
 }
 
 - (void) testSave {
+    NSError* error;
+    CBLCollection* defaultColl = [self.db defaultCollection: &error];
+    
     CBLMutableDocument *doc = [[CBLMutableDocument alloc] init];
     NSLog(@"Document: %@", doc.id);
     
@@ -53,8 +56,8 @@ NSString* dbName = @"release-verification";
     NSData* data = [str dataUsingEncoding:NSUTF8StringEncoding];
     [doc setValue:[[CBLBlob alloc] initWithContentType:@"text/plain" data:data] forKey:@"blob"];
     
-    NSError* error;
-    if ([self.db saveDocument: doc error: &error]) {
+    
+    if ([defaultColl saveDocument: doc error: &error]) {
         NSLog(@">>> Successfully saving the document");
     } else {
         NSLog(@"Error saving a document: %@", error);
