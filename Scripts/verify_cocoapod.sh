@@ -5,44 +5,18 @@ set -e
 function usage
 {
   echo "Usage: "
-  echo "\t${0} -v <Version> [--excludeArch]"
-  echo "\t${0} -spec <path to local podspec> [--excludeArch]"
-  echo "\n  --excludeArch\t:\t Excludes the arm64 from the iphone simulator architecture. Remove this when switch to XCFramework"
+  echo "\t${0} -v <Version>"
   echo "\n"
 }
 
-while [[ $# -gt 0 ]]
-do
-  key=${1}
-  case $key in
-      -v)
-      VERSION=${2}
-      shift
-      ;;
-      -spec)
-      SPEC=${2}
-      shift
-      ;;
-      --excludeArch)
-      EXCLUDE_ARCH=YES
-      ;;
-      *)
-      usage
-      exit 3
-      ;;
-  esac
-  shift
-done
-
-# require any of these params
-if [[ -z "$VERSION" ]] && [[ -z "$SPEC" ]]
-then
+if [[ "$1" != "-v" || -z "$2" ]]; then
   usage
-  exit 4
 fi
 
+VERSION="$2"
+
 # ------------------------------
-echo "Starting to verify $VERSION / $SPEC"
+echo "Starting to verify $VERSION"
 
 echo "Updating repo(pod repo update)..."
 pod repo update
@@ -64,7 +38,12 @@ function verify_cocoapod
   XCWORKSPACE=$PROJECT_PATH/$PROJECT_NAME.xcworkspace/
   XCSCHEME="${PROJECT_NAME}-$DESTIN-$LANGUAGE-tests"
   PODFILE="$PROJECT_PATH/Podfile"
-  TEST_SIMULATOR=$(xcrun xctrace list devices 2>&1 | grep -oE 'iPhone.*?[^\(]+' | head -1 | sed 's/Simulator//g' | awk '{$1=$1;print}')
+  
+  # Get the latest available iPhone simulator, excluding iPhone SE
+  TEST_SIMULATOR=$(xcrun simctl list devices available | grep -o 'iPhone [^)]* (.*)' | grep -v 'iPhone SE' | sort -V | tail -n 1)
+
+  # Extract the device name (iPhone model)
+  DEVICE_NAME=$(echo "$TEST_SIMULATOR" | sed 's/ (.*)//')
   
   function cleanup
   {
@@ -96,17 +75,19 @@ function verify_cocoapod
   # destination
   if [[ "$DESTIN" == "ios" ]]
   then
-    DESTINATION="platform=iOS Simulator,name=${TEST_SIMULATOR}"
+    # Get the latest available iPhone simulator, excluding iPhone SE
+    TEST_SIMULATOR=$(xcrun simctl list devices available | grep -o 'iPhone [^)]* (.*)' | grep -v 'iPhone SE' | sort -V | tail -n 1)
+
+    # Extract the device name (iPhone model)
+    DEVICE_NAME=$(echo "$TEST_SIMULATOR" | sed 's/ (.*)//')
+
+    DESTINATION="platform=iOS Simulator,name=${DEVICE_NAME}"
+    ARCHS="arm64"
+    PLATFORM="ios, '12.0'"
   else
-    DESTINATION="platform=macOS,arch=x86_64"
-  fi
-  
-  # platform
-  if [[ "$DESTIN" == "ios" ]]
-  then
-  PLATFORM="ios, '11.0'"
-  else
-  PLATFORM="macos, '10.14'"
+    DESTINATION="platform=macOS"
+    ARCHS="x86_64 arm64"
+    PLATFORM="macos, '12.0'"
   fi
   
   # create and populate Podfile
@@ -115,12 +96,7 @@ function verify_cocoapod
   echo " " >> $PODFILE
   echo "target '$XCSCHEME' do" >> $PODFILE
   echo "  use_frameworks!" >> $PODFILE
-  if [[ -z "$SPEC" ]]
-  then
-    echo "  pod '$PRODUCT', '$VERSION'" >> $PODFILE
-  else
-    echo "  pod '$PRODUCT', :podspec => '$SPEC'" >> $PODFILE
-  fi
+  echo "  pod '$PRODUCT', '$VERSION'" >> $PODFILE
   echo "end" >> $PODFILE
   echo " " >> $PODFILE
   
@@ -142,6 +118,8 @@ function verify_cocoapod
     -workspace $XCWORKSPACE \
     -scheme $XCSCHEME \
     -destination "$DESTINATION" \
+    ARCHS="$ARCHS" \
+    ONLY_ACTIVE_ARCH=NO \
     "BITCODE_GENERATION_MODE=bitcode" \
     "CODE_SIGNING_REQUIRED=NO" "CODE_SIGN_IDENTITY=" "-quiet"
   
@@ -166,8 +144,9 @@ verify_cocoapod "objc" "enterprise" "macos"
 verify_cocoapod "objc" "community" "ios"
 verify_cocoapod "objc" "community" "macos"
 
-echo "-------------------------------"
-echo "Cocoapod Verification Complete"
+echo "--------------------------------------"
+echo "Verification Results"
+echo "FROM: Cocoapod"
 echo "VERSION: $VERSION"
 echo "Cocoapod: $(pod --version)"
 echo "Xcode: $(xcodebuild -version)"

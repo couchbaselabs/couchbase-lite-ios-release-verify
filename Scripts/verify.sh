@@ -53,7 +53,7 @@ if [[ "$DOWNLOADS" == "YES" ]]; then
 elif [[ "$CARTHAGE" == "YES" ]]; then
   FROM="Carthage"
 else
-  FROM="Jenkins(http://172.23.120.24/builds/latestbuilds/couchbase-lite-ios/)"
+  FROM="https://latestbuilds.service.couchbase.com/builds/latestbuilds/couchbase-lite-ios/"
 fi
 
 #######################################
@@ -80,7 +80,7 @@ download_unzip()
   else
     # From the Jenkins location
     FILENAME=couchbase-lite-${1}_xc_${2}_${VERSION}-${BUILD}
-    URL=http://latestbuilds.service.couchbase.com/builds/latestbuilds/couchbase-lite-ios/$VERSION/$BUILD/${FILENAME}.zip
+    URL=https://latestbuilds.service.couchbase.com/builds/latestbuilds/couchbase-lite-ios/$VERSION/$BUILD/${FILENAME}.zip
   fi
   
   # >>>> Unzip
@@ -105,9 +105,13 @@ download_unzip()
 #######################################
 verify_version()
 {
+  local pattern='^([0-9])\.([0-9])\.([0-9]{1,2}).*$'
+  if [[ $VERSION =~ $pattern ]]; then
+    extracted_version="${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]}"
+  fi
   echo "Verifying Info Plist : $1"
   local info_ver=$(plutil -extract CFBundleShortVersionString xml1 -o - $1 | sed -n "s/.*<string>\(.*\)<\/string>.*/\1/p")
-  if [[ (-z $info_ver) || ("$info_ver" != "$VERSION") ]]; then
+  if [[ (-z $info_ver) || ("$info_ver" != $extracted_version) ]]; then
     echo "Version Mismatch! extracted($info_ver) & expected($VERSION) => path $1"
     exit 4
   fi
@@ -190,7 +194,11 @@ declare -a langs=("swift" "objc")
 declare -a edition=("enterprise" "community")
 declare -a reports
 
-TEST_SIMULATOR=$(xcrun xctrace list devices 2>&1 | grep -oE 'iPhone.*?[^\(]+' | head -1 | sed 's/Simulator//g' | awk '{$1=$1;print}')
+# Get the latest available iPhone simulator, excluding iPhone SE
+TEST_SIMULATOR=$(xcrun simctl list devices available | grep -o 'iPhone [^)]* (.*)' | grep -v 'iPhone SE' | sort -V | tail -n 1)
+
+# Extract the device name (iPhone model)
+DEVICE_NAME=$(echo "$TEST_SIMULATOR" | sed 's/ (.*)//')
 
 for EDITION in "${edition[@]}"; do
   PROJECT_NAME="ReleaseVerify-binary"
@@ -201,25 +209,25 @@ for EDITION in "${edition[@]}"; do
     rm -rf "${FR_PATH}/*"
     
     # download and verify version - swift
-    echo "downloading swift..."
+    echo "Downloading Swift..."
     download_unzip swift $EDITION
     
-    echo "verifying swift version..."
+    echo "Verifying Swift version..."
     PLIST="${BASEDIR}/../$FILENAME/CouchbaseLiteSwift.xcframework/ios-arm64/CouchbaseLiteSwift.framework/Info.plist"
     verify_version $PLIST
     
-    echo "copying swift..."
+    echo "Copying Swift..."
     cp -Rv "${BASEDIR}/../$FILENAME/" "${FR_PATH}/"
     
     # download and verify version - objc
-    echo "downloading objc..."
+    echo "Downloading Obj-C..."
     download_unzip objc $EDITION
     
-    echo "verifying objc version..."
+    echo "Verifying Obj-C version..."
     PLIST="${BASEDIR}/../$FILENAME/CouchbaseLite.xcframework/ios-arm64/CouchbaseLite.framework/Info.plist"
     verify_version $PLIST
     
-    echo "copying objc..."
+    echo "Copying Obj-C..."
     cp -Rv "${BASEDIR}/../$FILENAME/" "${FR_PATH}/"
   else
     # CARTHAGE
@@ -247,8 +255,10 @@ for EDITION in "${edition[@]}"; do
       
       # set destination
       DESTINATION="platform=OS X"
+      ARCHS="x86_64 arm64"
       if [[ "$DEVICE" == "ios" ]]; then
-        DESTINATION="platform=iOS Simulator,name=${TEST_SIMULATOR}"
+        DESTINATION="platform=iOS Simulator,name=${DEVICE_NAME}"
+        ARCHS="arm64"
       fi
   
       # XCODE TEST!!
@@ -256,6 +266,8 @@ for EDITION in "${edition[@]}"; do
         -project $XCPROJECT \
         -scheme $XCSCHEME \
         -destination "$DESTINATION" \
+        ARCHS="$ARCHS" \
+        ONLY_ACTIVE_ARCH=NO \
         "CODE_SIGNING_REQUIRED=NO" "CODE_SIGN_IDENTITY=" "-quiet"
         
       if [[ $? == 0 ]]; then
@@ -270,11 +282,10 @@ for EDITION in "${edition[@]}"; do
 done
 
 echo "--------------------------------------"
-echo "Verification Complete"
+echo "Verification Results"
 echo "FROM: $FROM"
 echo "VERSION: $VERSION"
 echo "BUILD: $BUILD"
 echo "$(xcodebuild -version)"
-echo "Carthage: $(carthage version)"
 
 printf '%b\n' "${reports[@]}"
