@@ -23,6 +23,7 @@ pod repo update
 
 BASEDIR=$(dirname "$0")
 PROJ_PREFIX="ReleaseVerify-cocoapod"
+FAIL_COUNT=0
 
 declare -a reports # for printing report at end
 
@@ -129,6 +130,7 @@ function verify_cocoapod
   else
     echo "Test Failed!!!"
     reports+=( "x ${DESTIN}-${LANGUAGE}-${EDITION}" )
+    ((FAIL_COUNT++))
   fi
   
   cleanup
@@ -151,3 +153,9 @@ echo "VERSION: $VERSION"
 echo "Cocoapod: $(pod --version)"
 echo "Xcode: $(xcodebuild -version)"
 printf '%b\n' "${reports[@]}"
+
+# Only on Jenkins. If any failures occurred, exit with failure.
+if [[ -n "$JENKINS_HOME" && $FAIL_COUNT -gt 0 ]]; then
+    echo "Verification failed: At least one failed."
+    exit 1
+fi

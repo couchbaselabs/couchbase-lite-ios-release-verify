@@ -47,6 +47,7 @@ if [ -z "$BUILD" ] && [ -z "$DOWNLOADS" ] && [ -z "$CARTHAGE" ]; then
 fi
 
 BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+FAIL_COUNT=0
 
 if [[ "$DOWNLOADS" == "YES" ]]; then
   FROM="Downloads Page"
@@ -133,7 +134,7 @@ update_carthage_and_copy()
 {
   # create and update carthage
   local cartfile="${PROJECT_PATH}/Cartfile"
-  rm -rf $cartfile
+  rm -rf "$cartfile"
   local json="CouchbaseLite-Community.json"
   if [[ "$EDITION" == "enterprise" ]]; then
     json="CouchbaseLite-Enterprise.json"
@@ -275,6 +276,7 @@ for EDITION in "${edition[@]}"; do
       else
           echo "Test Failed!!!"
           reports+=( "x ${DEVICE}-${LANG}-${EDITION}" )
+          ((FAIL_COUNT++))
       fi
     done
   done
@@ -289,3 +291,9 @@ echo "BUILD: $BUILD"
 echo "$(xcodebuild -version)"
 
 printf '%b\n' "${reports[@]}"
+
+# Only on Jenkins. If any failures occurred, exit with failure.
+if [[ -n "$JENKINS_HOME" && $FAIL_COUNT -gt 0 ]]; then
+    echo "Verification failed: At least one failed."
+    exit 1
+fi
