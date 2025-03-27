@@ -16,3 +16,4 @@ This project can be used to verify the release builds.
 ## Swift Package Verification
 - `sh Scripts/verify_spm.sh [-v <Version> | -b <Branch>] [-vs <Vector Search Version> | -vb <Vector Search Branch>]`
 
+See: http://jenkins.mobiledev.couchbase.com/job/validate-ios/
