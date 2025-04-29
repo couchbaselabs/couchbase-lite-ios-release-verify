@@ -64,6 +64,7 @@ fi
 BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 CE_SRC_DIR="${BASEDIR}/../ReleaseVerify/ReleaseVerify-SPM-CE"
 EE_SRC_DIR="${BASEDIR}/../ReleaseVerify/ReleaseVerify-SPM-EE"
+FAIL_COUNT=0
 
 function modify_dependency
 {
@@ -124,6 +125,7 @@ function test_ce
     reports+=( "\xE2\x9C\x94 Community Edition" )
   else
     reports+=( "x Community Edition" )
+    ((FAIL_COUNT++))
   fi
   popd > /dev/null
 }
@@ -137,6 +139,7 @@ function test_ee
     reports+=( "\xE2\x9C\x94 Enterprise Edition" )
   else
     reports+=( "x Enterprise Edition" )
+    ((FAIL_COUNT++))
   fi
   popd > /dev/null
 }
@@ -220,3 +223,9 @@ fi
 
 echo "$(xcodebuild -version)"
 printf '%b\n' "${reports[@]}"
+
+# Only on Jenkins. If any failures occurred, exit with failure.
+if [[ -n "$JENKINS_HOME" && $FAIL_COUNT -gt 0 ]]; then
+    echo "Verification failed: At least one failed."
+    exit 1
+fi
