@@ -17,3 +17,4 @@ This project can be used to verify the release builds.
 - `sh Scripts/verify_spm.sh [-v <Version> | -b <Branch>] [-vs <Vector Search Version> | -vb <Vector Search Branch>]`
 
 See: http://jenkins.mobiledev.couchbase.com/job/validate-ios/
+Additional: https://github.com/couchbaselabs/couchbase-lite-ios-release-verify/wiki/Release-process-and-steps
