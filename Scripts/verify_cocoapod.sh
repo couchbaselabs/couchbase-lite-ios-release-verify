@@ -84,11 +84,11 @@ function verify_cocoapod
 
     DESTINATION="platform=iOS Simulator,name=${DEVICE_NAME}"
     ARCHS="arm64"
-    PLATFORM="ios, '12.0'"
+    PLATFORM="ios, '15.0'"
   else
     DESTINATION="platform=macOS"
     ARCHS="x86_64 arm64"
-    PLATFORM="macos, '12.0'"
+    PLATFORM="macos, '13.0'"
   fi
   
   # create and populate Podfile
