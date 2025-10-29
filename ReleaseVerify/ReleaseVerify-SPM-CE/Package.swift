@@ -6,16 +6,16 @@ import PackageDescription
 let package = Package(
     name: "ReleaseVerify-SPM-CE",
     platforms: [
-        .iOS(.v12), .macOS(.v12)
+        .iOS(.v15), .macOS(.v13)
     ],
     dependencies: [
-        .package(url: "https://github.com/couchbase/couchbase-lite-ios.git", exact: "3.2.1")
+        .package(url: "https://github.com/couchbase/couchbase-lite-swift.git", exact: "4.0.0")
     ],
     targets: [
         .executableTarget(
             name: "ReleaseVerify-SPM-CE",
             dependencies: [
-                .product(name: "CouchbaseLiteSwift", package: "couchbase-lite-ios")
+                .product(name: "CouchbaseLiteSwift", package: "couchbase-lite-swift")
             ]),
         .testTarget(
             name: "ReleaseVerify-SPM-CETests",

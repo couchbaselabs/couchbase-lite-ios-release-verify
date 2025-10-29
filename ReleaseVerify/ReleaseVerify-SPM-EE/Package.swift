@@ -6,11 +6,11 @@ import PackageDescription
 let package = Package(
     name: "ReleaseVerify-SPM-EE",
     platforms: [
-        .iOS(.v12), .macOS(.v12)
+        .iOS(.v15), .macOS(.v13)
     ],
     dependencies: [
-        .package(url: "https://github.com/couchbase/couchbase-lite-swift-ee", from: "3.2.1"),
-        .package(url: "https://github.com/couchbase/couchbase-lite-vector-search-spm.git", from: "1.0.0"),
+        .package(url: "https://github.com/couchbase/couchbase-lite-swift-ee", from: "4.0.0"),
+        .package(url: "https://github.com/couchbase/couchbase-lite-vector-search-spm.git", from: "2.0.0"),
     ],
     targets: [
         .executableTarget(
