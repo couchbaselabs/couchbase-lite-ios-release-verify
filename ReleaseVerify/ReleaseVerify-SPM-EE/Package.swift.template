@@ -9,8 +9,8 @@ let package = Package(
         .iOS(.v15), .macOS(.v13)
     ],
     dependencies: [
-        .package(url: "https://github.com/couchbase/couchbase-lite-swift-ee", from: "4.0.0"),
-        .package(url: "https://github.com/couchbase/couchbase-lite-vector-search-spm.git", from: "2.0.0"),
+        .package(url: "https://github.com/couchbase/couchbase-lite-swift-ee", from: "__CBL_VERSION__"),
+        .package(url: "https://github.com/couchbase/couchbase-lite-vector-search-spm.git", from: "__VS_VERSION__"),
     ],
     targets: [
         .executableTarget(
