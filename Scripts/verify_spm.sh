@@ -76,14 +76,33 @@ else
 fi
 
 # -------------------------------
+# Version Comparison
+# -------------------------------
+# Returns 0 if $1 < $2, 1 otherwise.
+version_lt() {
+  # Strip pre-release suffix (e.g. 3.3.0-beta1 -> 3.3.0) so a beta is treated
+  # as equal to its release, not less than it.
+  local a="${1%%-*}"
+  local b="${2%%-*}"
+  # Equal versions are not "less than".
+  [ "$a" = "$b" ] && return 1
+  # Natural version sort: if $a sorts first, then $a < $b.
+  [ "$(printf '%s\n%s\n' "$a" "$b" | sort -V | head -n1)" = "$a" ]
+}
+
+# -------------------------------
 # Modify Package.swift
 # -------------------------------
 modify_package() {
   local EDITION=$1
 
   if [ "$EDITION" = "CE" ]; then
+    local TEMPLATE="Package.swift.template"
+    if version_lt "$CBL_VERSION" "3.3.0"; then
+      TEMPLATE="Package.swift.legacy.template"
+    fi
     sed "s|__CBL_VERSION__|$CBL_VERSION|g" \
-      Package.swift.template > Package.swift
+      "$TEMPLATE" > Package.swift
   else
     sed \
       -e "s|__CBL_VERSION__|$CBL_VERSION|g" \
