@@ -15,7 +15,7 @@ let package = Package(
         .executableTarget(
             name: "ReleaseVerify-SPM-CE",
             dependencies: [
-                .product(name: "CouchbaseLiteSwift", package: "couchbase-lite-swift")
+                .product(name: "CouchbaseLiteSwift", package: "couchbase-lite-ios")
             ]),
         .testTarget(
             name: "ReleaseVerify-SPM-CETests",
